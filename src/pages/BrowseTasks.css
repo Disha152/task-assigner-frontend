@@ -1,0 +1,27 @@
+/* src/pages/BrowseTasks.css */
+
+.task-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #343a40;
+  }
+  
+  .btn-outline-primary {
+    color: #5624d0 !important;
+    border-color: #5624d0 !important;
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #5624d0 !important;
+    color: white !important;
+  }
+  

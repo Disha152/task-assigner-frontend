@@ -1,0 +1,91 @@
+/* 
+h2 {
+    font-weight: 600;
+  }
+  
+  .card-title {
+    font-weight: 500;
+  }
+  
+  .btn-primary {
+    background-color: #5624d0;
+    border-color: #5624d0;
+  }
+  
+  .btn-primary:hover {
+    background-color: #3e1aa6;
+    border-color: #3e1aa6;
+  }
+   */
+
+   /* Home.css */
+
+.hero-section {
+    background-color: #f5f0ff;
+    padding: 80px 0;
+  }
+  
+  .hero-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2c2c2c;
+  }
+  
+  .hero-section p {
+    font-size: 1.25rem;
+    color: #555;
+  }
+  
+  .section-heading {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 2rem;
+  }
+  
+  .card-custom {
+    border-radius: 12px;
+    transition: all 0.3s ease-in-out;
+    background-color: #ffffff;
+  }
+  
+  .card-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+  
+  .card-custom .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .card-custom .card-text {
+    color: #666;
+    font-size: 0.95rem;
+  }
+  
+  .cta-section {
+    background-color: #f2f3f5;
+    padding: 70px 0;
+  }
+  
+  .cta-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c2c2c;
+  }
+  
+  .cta-section p {
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  .primary-btn {
+    background-color: #5624d0 !important;
+    border-color: #5624d0 !important;
+    font-weight: 600;
+    padding: 10px 24px;
+    font-size: 1rem;
+    border-radius: 8px;
+  }
