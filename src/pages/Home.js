@@ -11,9 +11,9 @@ import taskIcon from "../assets/task.svg";
 import earningIcon from "../assets/earning.svg";
 
 import blobPurple from "../assets/blob_purple.svg";
-import { motion } from "framer-motion";
+
 import "./Home.css";
-import contactSVG from '../assets/3.svg';
+
 
 
 const Home = () => {
@@ -65,7 +65,7 @@ const Home = () => {
               </Button>
             </Col>
             <Col md={6} className="text-center">
-              <Player autoplay loop src={animationOne} style={{ height: '450px', width: '450px' }} />
+              <Player autoplay loop src={animationOne} style={{ height: '500px', width: '500px' }} />
             </Col>
           </Row>
         </Container>
