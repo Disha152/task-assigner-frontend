@@ -75,314 +75,159 @@ const Topbar = () => {
   };
 
   return (
-    // <Navbar
-    //   expand="lg"
-    //   style={{ backgroundColor: "#5624d0", paddingTop: "0.75rem", paddingBottom: "0.75rem" }}
-    //   variant="dark"
-    //   sticky="top"
-    //   className="shadow-sm"
-    // >
-    //   <Container fluid className="px-4">
-    //     <Navbar.Brand
-    //       as={Link}
-    //       to="/"
-    //       className="fw-bold fs-4 text-white me-4"
-    //       style={{ whiteSpace: "nowrap" }}
-    //     >
-    //       TaskAssigner
-    //     </Navbar.Brand>
-
-    //     <Navbar.Toggle aria-controls="main-navbar" />
-
-    //     <Navbar.Collapse
-    //       id="main-navbar"
-    //       className="d-flex justify-content-between align-items-center"
-    //     >
-    //       {/* Search Form */}
-    //       <Form
-    //         className="position-relative mx-lg-auto"
-    //         style={{ maxWidth: "450px", width: "100%" }}
-    //         ref={dropdownRef}
-    //       >
-    //         <FormControl
-    //           type="search"
-    //           placeholder="Search tasks..."
-    //           className="me-2"
-    //           aria-label="Search"
-    //           value={searchQuery}
-    //           onChange={(e) => setSearchQuery(e.target.value)}
-    //           onFocus={() => {
-    //             if (filteredTasks.length > 0) setShowDropdown(true);
-    //           }}
-    //         />
-
-    //         {showDropdown && (
-    //           <ListGroup
-    //             className="position-absolute mt-1 w-100 shadow-sm"
-    //             style={{ zIndex: 1000, maxHeight: "300px", overflowY: "auto" }}
-    //           >
-    //             {loading ? (
-    //               <ListGroup.Item className="text-center">
-    //                 <Spinner animation="border" size="sm" />
-    //               </ListGroup.Item>
-    //             ) : filteredTasks.length === 0 ? (
-    //               <ListGroup.Item className="text-muted text-center">
-    //                 No tasks found
-    //               </ListGroup.Item>
-    //             ) : (
-    //               filteredTasks.map((task) => (
-    //                 <ListGroup.Item
-    //                   key={task._id}
-    //                   action
-    //                   onClick={() => {
-    //                     navigate(`/tasks/${task._id}`);
-    //                     setShowDropdown(false);
-    //                     setSearchQuery("");
-    //                   }}
-    //                 >
-    //                   <div>
-    //                     <strong>{task.title}</strong> — by {task.creator.name}
-    //                   </div>
-    //                   <small className="text-muted">
-    //                     Skills: {task.skills.join(", ")}
-    //                   </small>
-    //                 </ListGroup.Item>
-    //               ))
-    //             )}
-    //           </ListGroup>
-    //         )}
-    //       </Form>
-
-    //       {/* Right Side Buttons */}
-    //       <Nav className="ms-auto align-items-center">
-    //         <Nav.Link as={Link} to="/" className="text-white fw-semibold me-3 d-flex align-items-center">
-    //           <FaCompass className="me-1" />
-    //           Explore
-    //         </Nav.Link>
-
-    //         {user && (
-    //           <>
-               
-    //             <Nav.Link as={Link} to="/my-tasks" className="text-white fw-semibold me-3 d-flex align-items-center">
-    //               <FaClipboardList className="me-1" />
-    //               My Tasks
-    //             </Nav.Link>
-
-    //             <Button
-    //               as={Link}
-    //               to="/create-task"
-    //               variant="light"
-    //               size="sm"
-    //               className="fw-bold me-3 d-flex align-items-center"
-    //               style={{ color: "#5624d0" }}
-    //             >
-    //               <FaPlus className="me-1" />
-    //               Create Task
-    //             </Button>
-    //           </>
-    //         )}
-
-    //         {!user ? (
-    //           <>
-    //             <Nav.Link as={Link} to="/login" className="text-white fw-semibold me-3">
-    //               Login
-    //             </Nav.Link>
-    //             <Button
-    //               as={Link}
-    //               to="/register"
-    //               variant="outline-light"
-    //               className="fw-semibold px-3"
-    //             >
-    //               Sign Up
-    //             </Button>
-    //           </>
-    //         ) : (
-    //           <>
-    //             <FaBell
-    //               size={20}
-    //               className="text-warning me-3"
-    //               title="Notifications"
-    //               style={{ cursor: "pointer" }}
-    //             />
-    //             <Dropdown align="end">
-    //               <Dropdown.Toggle
-    //                 as="div"
-    //                 className="text-white d-flex align-items-center"
-    //                 style={{ cursor: "pointer" }}
-    //               >
-    //                 <FaUserCircle size={22} className="me-1" />
-    //                 <span className="fw-semibold">{user.name || user.email || "Profile"}</span>
-    //               </Dropdown.Toggle>
-    //               <Dropdown.Menu>
-    //                 <Dropdown.Item as={Link} to="/profile">Personal Details</Dropdown.Item>
-    //                 <Dropdown.Item as={Link} to="/submissions">My Submissions</Dropdown.Item>
-    //                 <Dropdown.Item as={Link} to="/saved-tasks">Saved Tasks</Dropdown.Item>
-    //                 <Dropdown.Item as={Link} to="/messages">Messages</Dropdown.Item>
-    //                 <Dropdown.Item onClick={logoutAndRedirect}>Logout</Dropdown.Item>
-    //               </Dropdown.Menu>
-    //             </Dropdown>
-    //           </>
-    //         )}
-    //       </Nav>
-    //     </Navbar.Collapse>
-    //   </Container>
-    // </Navbar>
     <Navbar
-  expand="lg"
-  style={{ backgroundColor: "#5624d0", paddingTop: "0.75rem", paddingBottom: "0.75rem" }}
-  variant="dark"
-  sticky="top"
-  className="shadow-sm"
->
-  <Container fluid className="px-4">
-    <Navbar.Brand
-      as={Link}
-      to="/"
-      className="fw-bold fs-4 text-white me-4"
-      style={{ whiteSpace: "nowrap" }}
+      expand="lg"
+      style={{ backgroundColor: "#5624d0", paddingTop: "0.75rem", paddingBottom: "0.75rem" }}
+      variant="dark"
+      sticky="top"
+      className="shadow-sm"
     >
-      TaskAssigner
-    </Navbar.Brand>
-
-    <Navbar.Toggle aria-controls="main-navbar" />
-
-    {/* SEARCH BAR FOR MOBILE */}
-    <div className="d-lg-none w-100 mt-2" ref={dropdownRef}>
-      <Form className="position-relative w-100">
-        <FormControl
-          type="search"
-          placeholder="Search tasks..."
-          className="mb-2"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onFocus={() => {
-            if (filteredTasks.length > 0) setShowDropdown(true);
-          }}
-        />
-        {showDropdown && (
-          <ListGroup
-            className="position-absolute w-100 shadow-sm"
-            style={{ zIndex: 1000, maxHeight: "300px", overflowY: "auto" }}
-          >
-            {/* ...same dropdown content */}
-          </ListGroup>
-        )}
-      </Form>
-    </div>
-
-    <Navbar.Collapse id="main-navbar" className="d-flex justify-content-between align-items-center mt-2 mt-lg-0">
-      
-      {/* DESKTOP SEARCH BAR */}
-      <div className="d-none d-lg-block w-100 mx-lg-auto" ref={dropdownRef}>
-        <Form className="position-relative" style={{ maxWidth: "450px", width: "100%" }}>
-          <FormControl
-            type="search"
-            placeholder="Search tasks..."
-            className="me-2"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => {
-              if (filteredTasks.length > 0) setShowDropdown(true);
-            }}
-          />
-          {showDropdown && (
-            <ListGroup
-              className="position-absolute mt-1 w-100 shadow-sm"
-              style={{ zIndex: 1000, maxHeight: "300px", overflowY: "auto" }}
-            >
-              {/* ...same dropdown content */}
-            </ListGroup>
-          )}
-        </Form>
-      </div>
-
-      {/* NAV LINKS */}
-      <Nav className="ms-auto align-items-lg-center flex-column flex-lg-row">
-        <Nav.Link
+      <Container fluid className="px-4">
+        <Navbar.Brand
           as={Link}
           to="/"
-          className="text-white fw-semibold me-lg-3 mb-2 mb-lg-0 d-flex align-items-center"
+          className="fw-bold fs-4 text-white me-4"
+          style={{ whiteSpace: "nowrap" }}
         >
-          <FaCompass className="me-1" />
-          Explore
-        </Nav.Link>
+          TaskAssigner
+        </Navbar.Brand>
 
-        {user && (
-          <>
-            <Nav.Link
-              as={Link}
-              to="/my-tasks"
-              className="text-white fw-semibold me-lg-3 mb-2 mb-lg-0 d-flex align-items-center"
-            >
-              <FaClipboardList className="me-1" />
-              My Tasks
-            </Nav.Link>
+        <Navbar.Toggle aria-controls="main-navbar" />
 
-            <Button
-              as={Link}
-              to="/create-task"
-              variant="light"
-              size="sm"
-              className="fw-bold me-lg-3 mb-2 mb-lg-0 d-flex align-items-center"
-              style={{ color: "#5624d0" }}
-            >
-              <FaPlus className="me-1" />
-              Create Task
-            </Button>
-          </>
-        )}
-
-        {!user ? (
-          <>
-            <Nav.Link
-              as={Link}
-              to="/login"
-              className="text-white fw-semibold me-lg-3 mb-2 mb-lg-0"
-            >
-              Login
-            </Nav.Link>
-            <Button
-              as={Link}
-              to="/register"
-              variant="outline-light"
-              className="fw-semibold px-3 mb-2 mb-lg-0"
-            >
-              Sign Up
-            </Button>
-          </>
-        ) : (
-          <>
-            <FaBell
-              size={20}
-              className="text-warning me-lg-3 mb-2 mb-lg-0"
-              title="Notifications"
-              style={{ cursor: "pointer" }}
+        <Navbar.Collapse
+          id="main-navbar"
+          className="d-flex justify-content-between align-items-center"
+        >
+          {/* Search Form */}
+          <Form
+            className="position-relative mx-lg-auto"
+            style={{ maxWidth: "450px", width: "100%" }}
+            ref={dropdownRef}
+          >
+            <FormControl
+              type="search"
+              placeholder="Search tasks..."
+              className="me-2"
+              aria-label="Search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => {
+                if (filteredTasks.length > 0) setShowDropdown(true);
+              }}
             />
-            <Dropdown align="end">
-              <Dropdown.Toggle
-                as="div"
-                className="text-white d-flex align-items-center"
-                style={{ cursor: "pointer" }}
+
+            {showDropdown && (
+              <ListGroup
+                className="position-absolute mt-1 w-100 shadow-sm"
+                style={{ zIndex: 1000, maxHeight: "300px", overflowY: "auto" }}
               >
-                <FaUserCircle size={22} className="me-1" />
-                <span className="fw-semibold">
-                  {user.name || user.email || "Profile"}
-                </span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item as={Link} to="/profile">Personal Details</Dropdown.Item>
-                <Dropdown.Item as={Link} to="/submissions">My Submissions</Dropdown.Item>
-                <Dropdown.Item as={Link} to="/saved-tasks">Saved Tasks</Dropdown.Item>
-                <Dropdown.Item as={Link} to="/messages">Messages</Dropdown.Item>
-                <Dropdown.Item onClick={logoutAndRedirect}>Logout</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </>
-        )}
-      </Nav>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
+                {loading ? (
+                  <ListGroup.Item className="text-center">
+                    <Spinner animation="border" size="sm" />
+                  </ListGroup.Item>
+                ) : filteredTasks.length === 0 ? (
+                  <ListGroup.Item className="text-muted text-center">
+                    No tasks found
+                  </ListGroup.Item>
+                ) : (
+                  filteredTasks.map((task) => (
+                    <ListGroup.Item
+                      key={task._id}
+                      action
+                      onClick={() => {
+                        navigate(`/tasks/${task._id}`);
+                        setShowDropdown(false);
+                        setSearchQuery("");
+                      }}
+                    >
+                      <div>
+                        <strong>{task.title}</strong> — by {task.creator.name}
+                      </div>
+                      <small className="text-muted">
+                        Skills: {task.skills.join(", ")}
+                      </small>
+                    </ListGroup.Item>
+                  ))
+                )}
+              </ListGroup>
+            )}
+          </Form>
+
+          {/* Right Side Buttons */}
+          <Nav className="ms-auto align-items-center">
+            <Nav.Link as={Link} to="/" className="text-white fw-semibold me-3 d-flex align-items-center">
+              <FaCompass className="me-1" />
+              Explore
+            </Nav.Link>
+
+            {user && (
+              <>
+               
+                <Nav.Link as={Link} to="/my-tasks" className="text-white fw-semibold me-3 d-flex align-items-center">
+                  <FaClipboardList className="me-1" />
+                  My Tasks
+                </Nav.Link>
+
+                <Button
+                  as={Link}
+                  to="/create-task"
+                  variant="light"
+                  size="sm"
+                  className="fw-bold me-3 d-flex align-items-center"
+                  style={{ color: "#5624d0" }}
+                >
+                  <FaPlus className="me-1" />
+                  Create Task
+                </Button>
+              </>
+            )}
+
+            {!user ? (
+              <>
+                <Nav.Link as={Link} to="/login" className="text-white fw-semibold me-3">
+                  Login
+                </Nav.Link>
+                <Button
+                  as={Link}
+                  to="/register"
+                  variant="outline-light"
+                  className="fw-semibold px-3"
+                >
+                  Sign Up
+                </Button>
+              </>
+            ) : (
+              <>
+                <FaBell
+                  size={20}
+                  className="text-warning me-3"
+                  title="Notifications"
+                  style={{ cursor: "pointer" }}
+                />
+                <Dropdown align="end">
+                  <Dropdown.Toggle
+                    as="div"
+                    className="text-white d-flex align-items-center"
+                    style={{ cursor: "pointer" }}
+                  >
+                    <FaUserCircle size={22} className="me-1" />
+                    <span className="fw-semibold">{user.name || user.email || "Profile"}</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item as={Link} to="/profile">Personal Details</Dropdown.Item>
+                    <Dropdown.Item as={Link} to="/submissions">My Submissions</Dropdown.Item>
+                    <Dropdown.Item as={Link} to="/saved-tasks">Saved Tasks</Dropdown.Item>
+                    <Dropdown.Item as={Link} to="/messages">Messages</Dropdown.Item>
+                    <Dropdown.Item onClick={logoutAndRedirect}>Logout</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+    
 
   );
 };
