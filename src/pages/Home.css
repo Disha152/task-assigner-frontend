@@ -1,29 +1,16 @@
-/* 
-h2 {
-    font-weight: 600;
-  }
-  
-  .card-title {
-    font-weight: 500;
-  }
-  
-  .btn-primary {
-    background-color: #5624d0;
-    border-color: #5624d0;
-  }
-  
-  .btn-primary:hover {
-    background-color: #3e1aa6;
-    border-color: #3e1aa6;
-  }
-   */
 
-   /* Home.css */
 
 .hero-section {
     background-color: #f5f0ff;
     padding: 80px 0;
   }
+  .hero-section {
+    background: linear-gradient(45deg, #2196F3, #21CBF3);
+    background-image: url('https://example.com/high-quality-image.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  
   
   .hero-section h1 {
     font-size: 3rem;
@@ -88,4 +75,280 @@ h2 {
     padding: 10px 24px;
     font-size: 1rem;
     border-radius: 8px;
+  } */
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.4em 0.6em;
+    border-radius: 0.5rem;
   }
+  
+  .custom-outline-btn {
+    border-color: #5624d0;
+    color: #5624d0;
+    font-weight: 600;
+  }
+  
+  .custom-outline-btn:hover {
+    background-color: #5624d0;
+    color: white;
+  }
+  
+  .task-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border-radius: 12px;
+  }
+  
+  .task-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border-radius: 12px;
+  }
+  
+  .card-hover:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Skeleton Card Style */
+.skeleton-card {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 15px;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-title,
+.skeleton-text,
+.skeleton-badge,
+.skeleton-button {
+  background: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 20px;
+}
+
+.skeleton-text {
+  width: 80%;
+  height: 12px;
+}
+
+.skeleton-badge {
+  width: 40%;
+  height: 18px;
+}
+
+.skeleton-button {
+  width: 50%;
+  height: 30px;
+  margin-top: 10px;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -100%;
+  }
+  100% {
+    background-position: 100%;
+  }
+}
+
+.skeleton-card {
+  background: #f1f1f1;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-title,
+.skeleton-text,
+.skeleton-badge,
+.skeleton-button {
+  background: #e0e0e0;
+  animation: shimmer 1.5s infinite linear;
+  background-size: 200% 100%;
+  background-position: -100%;
+}
+
+/* Specific animation speed and position */
+.skeleton-title {
+  animation-duration: 2s;
+}
+
+.skeleton-text {
+  animation-duration: 2s;
+  animation-delay: 0.4s;
+}
+
+.skeleton-badge {
+  animation-duration: 2s;
+  animation-delay: 0.8s;
+}
+
+.skeleton-button {
+  animation-duration: 2s;
+  animation-delay: 1.2s;
+}
+
+.primary-btn {
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  border: none;
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+}
+.card-custom {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-custom:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+h1, h2, h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+p, span {
+  font-family: 'Lora', serif;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+/* For Webkit browsers like Chrome */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.section-heading {
+  margin-bottom: 40px;
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.card-custom {
+  padding: 25px;
+}
+.glass-effect {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+}
+.card-custom .card-body {
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.card-custom:hover .card-body {
+  opacity: 1;
+}
+
+.card-custom:hover .card-footer {
+  display: block;
+}
+.hero-section {
+  background: linear-gradient(to right, #ede7f6, #f3ebfc);
+}
+.hero-section h1 {
+  text-shadow: 1px 1px 10px rgba(86, 36, 208, 0.1);
+}
+
+.primary-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(86, 36, 208, 0.3);
+}
+.hero-section {
+  background: linear-gradient(to right, #f3ebfc, #ede7f6); /* light shade of #5624d0 */
+  position: relative;
+  overflow: hidden;
+  min-height: 60vh;
+}
+
+.hero-section h1 {
+  font-weight: bold;
+  text-shadow: 1px 1px 10px rgba(86, 36, 208, 0.1);
+}
+
+.primary-btn {
+  background-color: #5624d0;
+  border: none;
+  transition: all 0.3s ease;
+  padding: 10px 24px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  color: white;
+}
+
+.primary-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(86, 36, 208, 0.3);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  border-radius: 1rem;
+  padding: 2rem;
+  z-index: 1;
+  position: relative;
+}
+
+.blob-bg {
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  width: 400px;
+  opacity: 0.15;
+  z-index: 0;
+}
+
+  
+  
