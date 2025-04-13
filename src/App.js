@@ -16,7 +16,7 @@ import TaskDetail from "./pages/TaskDetailsPage";
 import PersonalDetails from './pages/PersonalDetails';
 import SubmitTaskForm from './pages/SubmitForm';
 import MyTasksPage from './pages/MyTasksPage';
-import CreatorPanel from './pages/CreatorPanel';
+import ReviewApplications from './pages/ReviewApplications';
 
 
 function App() {
@@ -40,7 +40,7 @@ function App() {
             <Route path="/task/:id" element={<TaskDetail />} />
             <Route path="/submit-task/:taskId" element={<SubmitTaskForm />} />
             <Route path="/my-tasks" element={<MyTasksPage />} />
-            <Route path="/creator-panel" element={<CreatorPanel />} />
+            <Route path="/task/:id/applications" element={<ReviewApplications />} />
 
 
             

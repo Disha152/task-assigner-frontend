@@ -22,50 +22,24 @@ import { FaTasks, FaUsers, FaAward } from 'react-icons/fa';
 import { FaRocket, FaUserFriends , FaMoneyBillWave} from "react-icons/fa";
 import { FaCheckCircle, FaBolt, FaLightbulb } from 'react-icons/fa';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+
 
 
 import "./Home.css";
 
 
 
-// const Home = () => {
-//   const [tasks, setTasks] = useState([]);
-//   const [loading, setLoading] = useState(true);
 
-//   useEffect(() => {
-//     const fetchTasks = async () => {
-//       try {
-//         const response = await axios.get("https://task-assigner-backend-8184.onrender.com/api/tasks");
-//         setTasks(response.data.slice(0, 4));
-//         setLoading(false);
-//       } catch (error) {
-//         console.error("Error fetching tasks:", error);
-//         setLoading(false);
-//       }
-//     };
-//     fetchTasks();
-//   }, []);
 
-//   const isUrgent = (deadline) => {
-//     const now = new Date();
-//     const due = new Date(deadline);
-//     const diff = (due - now) / (1000 * 60 * 60 * 24);
-//     return diff <= 3;
-//   };
 
-//   const getStatusColor = (status) => {
-//     switch (status) {
-//       case "open": return "success";
-//       case "assigned": return "warning";
-//       case "completed": return "primary";
-//       case "rejected": return "danger";
-//       default: return "secondary";
-//     }
-//   };
 const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
+  const user = JSON.parse(localStorage.getItem("user"));
+const currentUserId = user?._id;
+const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -237,7 +211,7 @@ const Home = () => {
                   </div>
                   
 
-                  <div>
+                  {/* <div>
                     <p className="mb-1"><strong>Budget:</strong> ₹{task.budget}</p>
                     <p className="mb-2"><strong>Deadline:</strong> {new Date(task.deadline).toLocaleDateString()}</p>
 
@@ -249,7 +223,32 @@ const Home = () => {
                     >
                       View Task
                     </Button>
-                  </div>
+                    
+                  </div> */}
+                  <div>
+  <p className="mb-1"><strong>Budget:</strong> ₹{task.budget}</p>
+  <p className="mb-2"><strong>Deadline:</strong> {new Date(task.deadline).toLocaleDateString()}</p>
+
+  <Button
+    as={Link}
+    to={`/task/${task._id}`}
+    variant="outline-primary"
+    className="custom-outline-btn mt-2 w-100"
+  >
+    View Task
+  </Button>
+
+  {task.creator?._id === currentUserId && (
+    <Button
+      variant="outline-primary"
+      className="mt-2 w-100"
+      onClick={() => navigate(`/task/${task._id}/applications`)}
+    >
+      Review Applications
+    </Button>
+  )}
+</div>
+
                 </Card.Body>
               </Card>
             ))}

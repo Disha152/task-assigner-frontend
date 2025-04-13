@@ -6,17 +6,18 @@ import { FaStar } from "react-icons/fa";
 
 const TaskDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate(); // ✅ Moved here
+  const navigate = useNavigate();
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState("");
+  const [user, setUser] = useState(null);
+  const [applicants, setApplicants] = useState([]);
+  const [showApplicants, setShowApplicants] = useState(false);
 
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const response = await axios.get(
-          `https://task-assigner-backend-8184.onrender.com/api/tasks/${id}`
-        );
+        const response = await axios.get(`https://task-assigner-backend-8184.onrender.com/api/tasks/${id}`);
         setTask(response.data);
         setLoading(false);
       } catch (error) {
@@ -25,13 +26,17 @@ const TaskDetail = () => {
       }
     };
 
+    const getUser = () => {
+      const userData = localStorage.getItem("user");
+      if (userData) setUser(JSON.parse(userData));
+    };
+
     fetchTask();
+    getUser();
   }, [id]);
 
   const handleApply = async (taskId) => {
-    const userData = localStorage.getItem("user");
-    const token = userData ? JSON.parse(userData).token : null;
-
+    const token = user?.token;
     if (!token) {
       alert("You must be logged in to apply for a task.");
       return;
@@ -48,17 +53,67 @@ const TaskDetail = () => {
           },
         }
       );
-
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Application failed.");
-      }
-
+      if (!response.ok) throw new Error(data.message || "Application failed.");
       alert(data.message);
     } catch (error) {
-      console.error("Apply Error:", error);
       alert(error.message || "Something went wrong while applying.");
+    }
+  };
+
+  const fetchApplicants = async () => {
+    try {
+      const response = await axios.get(
+        `https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/applications`
+      );
+      setApplicants(response.data);
+      setShowApplicants(true);
+    } catch (err) {
+      alert("Failed to fetch applications.");
+    }
+  };
+
+  const approveApplicant = async (userId) => {
+    const confirmApproval = window.confirm("Are you sure you want to approve this applicant?");
+    if (!confirmApproval) return;
+
+    try {
+      await axios.post(
+        `https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/approve/${userId}`
+      );
+      alert("User approved!");
+      setApplicants(prev => prev.filter(app => app._id !== userId));
+    } catch (err) {
+      alert("Failed to approve user.");
+    }
+  };
+
+  const handleCommentSubmit = async () => {
+    if (!comment.trim()) {
+      alert("Comment cannot be empty.");
+      return;
+    }
+
+    const token = user?.token;
+    if (!token) {
+      alert("You must be logged in to submit a comment.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/comment`,
+        { comment },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.status === 200) {
+        setComment(""); // Reset the comment field
+        alert("Comment submitted successfully!");
+      }
+    } catch (error) {
+      alert("Failed to submit the comment.");
     }
   };
 
@@ -77,6 +132,8 @@ const TaskDetail = () => {
       </Container>
     );
   }
+
+  const isCreator = user?.user?._id && task?.creator?._id && user.user._id === task.creator._id;
 
   return (
     <Container className="py-5">
@@ -141,10 +198,7 @@ const TaskDetail = () => {
               variant="primary"
               className="mt-2"
               style={{ backgroundColor: "#5624d0", borderColor: "#5624d0" }}
-              onClick={() => {
-                alert("Comment submitted!");
-                setComment("");
-              }}
+              onClick={handleCommentSubmit}
             >
               Submit Comment
             </Button>
@@ -152,31 +206,73 @@ const TaskDetail = () => {
         </div>
 
         <div className="d-flex flex-column gap-3 mt-3">
-          <Button
-            onClick={() => handleApply(task._id)}
-            variant="primary"
-            style={{
-              backgroundColor: "#5624d0",
-              borderColor: "#5624d0",
-              width: "100%",
-            }}
-          >
-            Apply for Task
-          </Button>
+          {!isCreator && (
+            <>
+              <Button
+                onClick={() => handleApply(task._id)}
+                variant="primary"
+                style={{
+                  backgroundColor: "#5624d0",
+                  borderColor: "#5624d0",
+                  width: "100%",
+                }}
+              >
+                Apply for Task
+              </Button>
 
-          <Button
-            onClick={() => navigate(`/submit-task/${task._id}`)}
-            variant="primary"
-            style={{
-              backgroundColor: "white",
-              borderColor: "#5624d0",
-              color: "#5624d0",
-              width: "100%",
-            }}
-          >
-            Submit the Task
-          </Button>
+              <Button
+                onClick={() => navigate(`/submit-task/${task._id}`)}
+                variant="outline-primary"
+                style={{ width: "100%" }}
+              >
+                Submit the Task
+              </Button>
+            </>
+          )}
+
+          {isCreator && (
+            <>
+              <Button
+                onClick={fetchApplicants}
+                variant="outline-success"
+                style={{ width: "100%" }}
+              >
+                Review Applications
+              </Button>
+
+              <Button
+                onClick={() => navigate(`/submissions/${task._id}`)}
+                variant="outline-primary"
+                style={{ width: "100%" }}
+              >
+                See All Submissions
+              </Button>
+            </>
+          )}
         </div>
+
+        {showApplicants && (
+          <div className="mt-4">
+            <h5>Applicants:</h5>
+            {applicants.length === 0 ? (
+              <p>No applicants yet.</p>
+            ) : (
+              applicants.map((applicant) => (
+                <Card key={applicant._id} className="my-2 p-3">
+                  <p><strong>Name:</strong> {applicant.name}</p>
+                  <p><strong>Email:</strong> {applicant.email}</p>
+                  <Button
+                    onClick={() => approveApplicant(applicant._id)}
+                    variant="success"
+                    size="sm"
+                  >
+                    Approve
+                  </Button>
+                </Card>
+              ))
+            )}
+          </div>
+        )}
       </Card>
     </Container>
   );
