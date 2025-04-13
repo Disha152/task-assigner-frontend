@@ -23,6 +23,8 @@ const CreateTaskPage = () => {
       deadline,
       skills: skills.split(",").map((s) => s.trim()),
     };
+    const creatorToken = localStorage.getItem("token"); // or whatever key you're using
+
 
     try {
       const response = await axios.post(
@@ -31,6 +33,7 @@ const CreateTaskPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${creatorToken}` 
           },
         }
       );

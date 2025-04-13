@@ -209,6 +209,20 @@ const Topbar = () => {
   </Button>
 )}
 
+{user?.role === "creator" && (
+  <Button
+    as={Link}
+    to="/creator-submissions"
+    variant="outline-light"
+    size="sm"
+    className="fw-semibold me-3 d-flex align-items-center"
+  >
+    <FaClipboardList className="me-1" />
+    View Submissions
+  </Button>
+)}
+
+
 
 
             {!user ? (

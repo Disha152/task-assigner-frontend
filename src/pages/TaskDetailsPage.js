@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Card, Spinner, Badge, Button, Form } from "react-bootstrap";
@@ -13,6 +14,8 @@ const TaskDetail = () => {
   const [user, setUser] = useState(null);
   const [applicants, setApplicants] = useState([]);
   const [showApplicants, setShowApplicants] = useState(false);
+  const [submissions, setSubmissions] = useState([]);
+  const [showSubmissions, setShowSubmissions] = useState(false);
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -63,13 +66,21 @@ const TaskDetail = () => {
 
   const fetchApplicants = async () => {
     try {
-      const response = await axios.get(
-        `https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/applications`
-      );
+      const response = await axios.get(`https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/applications`);
       setApplicants(response.data);
       setShowApplicants(true);
     } catch (err) {
       alert("Failed to fetch applications.");
+    }
+  };
+
+  const fetchSubmissions = async () => {
+    try {
+      const response = await axios.get(`https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/submissions`);
+      setSubmissions(response.data);
+      setShowSubmissions(true);
+    } catch (err) {
+      alert("Failed to fetch submissions.");
     }
   };
 
@@ -78,9 +89,7 @@ const TaskDetail = () => {
     if (!confirmApproval) return;
 
     try {
-      await axios.post(
-        `https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/approve/${userId}`
-      );
+      await axios.post(`https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/approve/${userId}`);
       alert("User approved!");
       setApplicants(prev => prev.filter(app => app._id !== userId));
     } catch (err) {
@@ -241,7 +250,7 @@ const TaskDetail = () => {
               </Button>
 
               <Button
-                onClick={() => navigate(`/submissions/${task._id}`)}
+                onClick={fetchSubmissions}
                 variant="outline-primary"
                 style={{ width: "100%" }}
               >
@@ -268,6 +277,22 @@ const TaskDetail = () => {
                   >
                     Approve
                   </Button>
+                </Card>
+              ))
+            )}
+          </div>
+        )}
+
+        {showSubmissions && (
+          <div className="mt-4">
+            <h5>Submissions:</h5>
+            {submissions.length === 0 ? (
+              <p>No submissions yet.</p>
+            ) : (
+              submissions.map((submission) => (
+                <Card key={submission._id} className="my-2 p-3">
+                  <p><strong>Submitted by:</strong> {submission.user?.name}</p>
+                  <p><strong>Status:</strong> {submission.status}</p>
                 </Card>
               ))
             )}
