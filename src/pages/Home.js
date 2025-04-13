@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Container, Row, Col, Button, Card, Badge } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -21,21 +21,57 @@ import blobPurpleShade from "../assets/blob_puple_shade.svg";
 import { FaTasks, FaUsers, FaAward } from 'react-icons/fa';
 import { FaRocket, FaUserFriends , FaMoneyBillWave} from "react-icons/fa";
 import { FaCheckCircle, FaBolt, FaLightbulb } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 
 import "./Home.css";
 
 
 
+// const Home = () => {
+//   const [tasks, setTasks] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchTasks = async () => {
+//       try {
+//         const response = await axios.get("https://task-assigner-backend-8184.onrender.com/api/tasks");
+//         setTasks(response.data.slice(0, 4));
+//         setLoading(false);
+//       } catch (error) {
+//         console.error("Error fetching tasks:", error);
+//         setLoading(false);
+//       }
+//     };
+//     fetchTasks();
+//   }, []);
+
+//   const isUrgent = (deadline) => {
+//     const now = new Date();
+//     const due = new Date(deadline);
+//     const diff = (due - now) / (1000 * 60 * 60 * 24);
+//     return diff <= 3;
+//   };
+
+//   const getStatusColor = (status) => {
+//     switch (status) {
+//       case "open": return "success";
+//       case "assigned": return "warning";
+//       case "completed": return "primary";
+//       case "rejected": return "danger";
+//       default: return "secondary";
+//     }
+//   };
 const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         const response = await axios.get("https://task-assigner-backend-8184.onrender.com/api/tasks");
-        setTasks(response.data.slice(0, 4));
+        setTasks(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -61,7 +97,6 @@ const Home = () => {
       default: return "secondary";
     }
   };
-
   return (
     <div style={{ backgroundColor: "#f7f9fa", minHeight: "100vh" }}>
     
@@ -160,72 +195,67 @@ const Home = () => {
   
 </div>
 
-      {/* Featured Tasks Section */}
-      <Container className="py-5 fade-in">
-        <h2 className="section-heading text-center">Featured Tasks</h2>
+  
+
+
+<Container className="py-5 fade-in">
+        <h2 className="section-heading text-center mb-4">Featured Tasks</h2>
+
         {loading ? (
-          <Row className="g-4">
-            {[...Array(4)].map((_, index) => (
-              <Col key={index} sm={12} md={6} lg={3}>
-                <div className="skeleton-card glass-effect">
-                  <div className="skeleton-title"></div>
-                  <div className="skeleton-text"></div>
-                  <div className="skeleton-badge"></div>
-                  <div className="skeleton-button"></div>
-                </div>
-              </Col>
-            ))}
-          </Row>
+          <div className="d-flex justify-content-center">Loading...</div>
         ) : tasks.length === 0 ? (
           <p className="text-center">No tasks available at the moment.</p>
         ) : (
-          <Row className="g-4">
+          <div
+            ref={scrollRef}
+            className="scroll-container hide-scrollbar"
+          >
             {tasks.map((task, index) => (
-              <Col key={index} sm={12} md={6} lg={3}>
-                <div className="hover-wrapper">
-                  <Card className="h-100 card-custom border-0 shadow-sm glass-effect fade-in">
-                    <Card.Body>
-                      <Card.Title className="d-flex justify-content-between align-items-center">
-                        {task.title}
-                        {isUrgent(task.deadline) && (
-                          <Badge bg="danger" className="ms-2">Urgent</Badge>
-                        )}
-                      </Card.Title>
+              <Card
+                key={index}
+                className="task-card glass-effect"
+              >
+                <Card.Body className="h-100 card-custom border-0 shadow-sm glass-effect fade-in">
+                  <div>
+                    <Card.Title className="d-flex justify-content-between align-items-center">
+                      {task.title}
+                      {isUrgent(task.deadline) && (
+                        <Badge bg="danger">Urgent</Badge>
+                      )}
+                    </Card.Title>
 
-                      <Card.Text>{task.description.slice(0, 60)}...</Card.Text>
+                    <Card.Text>{task.description.slice(0, 60)}...</Card.Text>
 
-                      <div className="mb-2">
-                        {task.skills?.[0] && (
-                          <Badge bg="info" className="me-2">{task.skills[0]}</Badge>
-                        )}
-                        {task.status && (
-                          <Badge bg={getStatusColor(task.status)}>{task.status}</Badge>
-                        )}
-                      </div>
+                    <div className="mb-2">
+                      {task.skills?.[0] && (
+                        <Badge bg="info" className="me-2">{task.skills[0]}</Badge>
+                      )}
+                      {task.status && (
+                        <Badge bg={getStatusColor(task.status)}>{task.status}</Badge>
+                      )}
+                    </div>
+                  </div>
+                  
 
-                      <div className="mt-2">
-                        <p><strong>Budget:</strong> ₹{task.budget}</p>
-                        <p><strong>Deadline:</strong> {new Date(task.deadline).toLocaleDateString()}</p>
-                      </div>
+                  <div>
+                    <p className="mb-1"><strong>Budget:</strong> ₹{task.budget}</p>
+                    <p className="mb-2"><strong>Deadline:</strong> {new Date(task.deadline).toLocaleDateString()}</p>
 
-                      <Button
-                        as={Link}
-                        to={`/task/${task._id}`}
-                        variant="outline-primary"
-                        className="custom-outline-btn mt-2"
-                      >
-                        View Task
-                      </Button>
-                    </Card.Body>
-                  </Card>
-                </div>
-              </Col>
+                    <Button
+                      as={Link}
+                      to={`/task/${task._id}`}
+                      variant="outline-primary"
+                      className="custom-outline-btn mt-2 w-100"
+                    >
+                      View Task
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
             ))}
-          </Row>
+          </div>
         )}
       </Container>
-
-    
      
 
       {/* CTA Section */}

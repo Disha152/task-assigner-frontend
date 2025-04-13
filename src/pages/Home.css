@@ -11,6 +11,36 @@
     background-position: center;
   }
   
+  .scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+  }
+  
+  .task-card {
+    min-width: 300px;
+    max-width: 300px;
+    height: 100%;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 16px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    background: white;
+  }
+  
+  /* Hide scrollbar for all browsers */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
   
   .hero-section h1 {
     font-size: 3rem;
@@ -76,6 +106,21 @@
     font-size: 1rem;
     border-radius: 8px;
   }
+
+  /* Hide scrollbar (cross-browser) */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;             /* Chrome/Safari */
+}
+
+/* Smooth scroll behavior */
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
 
   .badge {
     font-size: 0.75rem;
