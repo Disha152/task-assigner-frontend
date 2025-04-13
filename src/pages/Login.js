@@ -80,7 +80,7 @@ const onSubmit = async (e) => {
         </Form>
 
         <div className="text-center mt-3 mb-3">
-          <span>──────── Other login options ────────</span>
+          <span>─────  Other login options  ───────</span>
         </div>
 
         <Row className="justify-content-center gap-2 mb-4">

@@ -168,7 +168,7 @@ const Topbar = () => {
                   My Tasks
                 </Nav.Link>
 
-                <Button
+                {/* <Button
                   as={Link}
                   to="/create-task"
                   variant="light"
@@ -178,9 +178,38 @@ const Topbar = () => {
                 >
                   <FaPlus className="me-1" />
                   Create Task
-                </Button>
+                </Button> */}
               </>
             )}
+
+{user?.role === "admin" && (
+  <Button
+    as={Link}
+    to="/admin"
+    variant="outline-light"
+    size="sm"
+    className="fw-semibold me-3 d-flex align-items-center"
+  >
+    <FaBookmark className="me-1" />
+    My Dashboard
+  </Button>
+)}
+
+{(user?.role === "creator" || user?.role === "admin") && (
+  <Button
+    as={Link}
+    to="/create-task"
+    variant="light"
+    size="sm"
+    className="fw-bold me-3 d-flex align-items-center"
+    style={{ color: "#5624d0" }}
+  >
+    <FaPlus className="me-1" />
+    Create Task
+  </Button>
+)}
+
+
 
             {!user ? (
               <>
