@@ -36,7 +36,7 @@
 
 | Frontend | Backend | Database | Auth | Deployment |
 |----------|---------|----------|------|-------------|
-| React.js, Bootstrap, React Router | Node.js, Express.js | MongoDB | JWT | Render / Vercel / Netlify |
+| React.js, Bootstrap, React Router | Node.js, Express.js | MongoDB | JWT | Render|
 
 ---
 
