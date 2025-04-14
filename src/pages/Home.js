@@ -143,7 +143,7 @@ const navigate = useNavigate();
           style={{
             padding: "12px 28px",
             fontSize: "1.1rem",
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
             border: "none",
             fontWeight: "600"
           }}>
