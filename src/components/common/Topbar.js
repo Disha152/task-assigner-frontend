@@ -115,7 +115,7 @@ const Topbar = () => {
           <Form className="position-relative mx-lg-auto w-100" style={{ maxWidth: "450px" }} ref={dropdownRef}>
   <InputGroup>
     <FormControl
-      placeholder="Search tasks..."
+      placeholder="Search for tasks..."
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
       onFocus={() => {
