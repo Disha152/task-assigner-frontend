@@ -108,6 +108,9 @@ const Topbar = () => {
         <Navbar.Toggle aria-controls="main-navbar" />
 
         <Navbar.Collapse id="main-navbar" className="justify-content-between align-items-center">
+
+
+
           {/* Search Bar */}
           <Form className="position-relative mx-lg-auto w-100" style={{ maxWidth: "450px" }} ref={dropdownRef}>
   <InputGroup>
@@ -124,13 +127,44 @@ const Topbar = () => {
     </InputGroup.Text>
   </InputGroup>
 
+  {showDropdown && filteredTasks.length > 0 && (
+  <ListGroup
+    className="position-absolute w-100 shadow"
+    style={{
+      zIndex: 1000,
+      maxHeight: "300px",
+      overflowY: "auto",
+      top: "100%", // to appear below input
+    }}
+  >
+    {filteredTasks.map((task) => (
+      <ListGroup.Item
+        key={task._id}
+        as={Link}
+        to={`/task/${task._id}`}
+        className="text-decoration-none text-dark"
+        onClick={() => {
+          setShowDropdown(false);
+          setSearchQuery("");
+        }}
+      >
+        <div className="fw-semibold">{task.title}</div>
+        <div style={{ fontSize: "0.8rem", color: "gray" }}>
+          {task.skills?.join(", ")}
+        </div>
+      </ListGroup.Item>
+    ))}
+  </ListGroup>
+)}
+
+
   {/* Dropdown stays the same */}
 </Form>
 
 
           {/* Right Side */}
           <Nav className="ms-auto align-items-center">
-            <Nav.Link as={Link} to="/" className="text-white fw-semibold me-3 d-flex align-items-center">
+            <Nav.Link as={Link} to="/browse-tasks" className="text-white fw-semibold me-3 d-flex align-items-center">
               <FaCompass className="me-1" />
               Explore
             </Nav.Link>
