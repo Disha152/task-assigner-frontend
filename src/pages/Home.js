@@ -93,7 +93,7 @@ const navigate = useNavigate();
   color: "#fff" // fallback color
 }}>
   Your Gateway to <span style={{
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     display: "inline-block"
