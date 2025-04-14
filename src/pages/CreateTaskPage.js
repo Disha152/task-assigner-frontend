@@ -23,12 +23,12 @@ const CreateTaskPage = () => {
       deadline,
       skills: skills.split(",").map((s) => s.trim()),
     };
-    const creatorToken = localStorage.getItem("token"); // or whatever key you're using
+    const creatorToken = localStorage.getItem("token");
 
 
     try {
       const response = await axios.post(
-        "https://task-assigner-backend-8184.onrender.com/api/tasks", // 🔁 Change this if your backend URL differs
+        "https://task-assigner-backend-8184.onrender.com/api/tasks",
         taskData,
         {
           headers: {

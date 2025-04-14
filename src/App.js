@@ -18,6 +18,8 @@ import SubmitTaskForm from './pages/SubmitForm';
 import MyTasksPage from './pages/MyTasksPage';
 import ReviewApplications from './pages/ReviewApplications';
 import CreatorSubmissions from "./pages/CreatorSubmissions"; 
+import AllTasks from "./pages/AllTasks";
+import AllSubmissions from "./pages/AllSubmissions";
 
 
 
@@ -45,6 +47,9 @@ function App() {
             <Route path="/my-tasks" element={<MyTasksPage />} />
             <Route path="/task/:id/applications" element={<ReviewApplications />} />
             <Route path="/creator-submissions" element={<CreatorSubmissions />} />
+            <Route path="/all-tasks" element={<AllTasks />} />
+            <Route path="/all-submissions" element={<AllSubmissions />} />
+
 
 
             

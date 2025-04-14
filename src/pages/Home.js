@@ -75,7 +75,7 @@ const navigate = useNavigate();
     <div style={{ backgroundColor: "#f7f9fa", minHeight: "100vh" }}>
     
 
-{/* Hero Section */}
+  {/* Hero Section */}
 <div className="hero-section position-relative text-light" style={{
   background: "radial-gradient(circle at top left, #001f3f, #001122)",
   minHeight: "100vh",
@@ -211,20 +211,7 @@ const navigate = useNavigate();
                   </div>
                   
 
-                  {/* <div>
-                    <p className="mb-1"><strong>Budget:</strong> ₹{task.budget}</p>
-                    <p className="mb-2"><strong>Deadline:</strong> {new Date(task.deadline).toLocaleDateString()}</p>
-
-                    <Button
-                      as={Link}
-                      to={`/task/${task._id}`}
-                      variant="outline-primary"
-                      className="custom-outline-btn mt-2 w-100"
-                    >
-                      View Task
-                    </Button>
-                    
-                  </div> */}
+                 
                   <div>
   <p className="mb-1"><strong>Budget:</strong> ₹{task.budget}</p>
   <p className="mb-2"><strong>Deadline:</strong> {new Date(task.deadline).toLocaleDateString()}</p>

@@ -1,16 +1,18 @@
 
-// import React, { useState } from "react";
+// import React, { useState, useContext } from "react";
 // import axios from "axios";
 // import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
-// import { useNavigate } from "react-router-dom"; // ✅ Added
+// import { useNavigate } from "react-router-dom";
+// import { AuthContext } from "../context/AuthContext"; // ✅ import AuthContext
 
 // const RegisterPage = () => {
+//   const { handleLogin } = useContext(AuthContext); // ✅ use handleLogin
 //   const [name, setName] = useState("");
 //   const [email, setEmail] = useState("");
 //   const [password, setPassword] = useState("");
 //   const [error, setError] = useState("");
 //   const [success, setSuccess] = useState("");
-//   const navigate = useNavigate(); // ✅ Initialized
+//   const navigate = useNavigate();
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
@@ -27,22 +29,16 @@
 //           },
 //         }
 //       );
-//       // After getting the response (adjust as per your API)
-// localStorage.setItem("user", JSON.stringify(res.data.user)); // or whatever your response returns
 
-
+//       // ✅ use login function after registration
 //       if (res.data.token) {
-//         localStorage.setItem("token", res.data.token);
+//         await handleLogin(email, password); // call login with same creds
 //       }
 
 //       setSuccess("Registration successful! Redirecting...");
-//       console.log("Registered user:", res.data);
-
-//       // ✅ Redirect to home page after delay
 //       setTimeout(() => {
 //         navigate("/");
-//       }, 1500);
-
+//       }, 1000);
 //     } catch (err) {
 //       if (err.response && err.response.data) {
 //         setError(err.response.data.message || "Registration failed");
@@ -153,13 +149,15 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext"; // ✅ import AuthContext
+import { AuthContext } from "../context/AuthContext";
 
 const RegisterPage = () => {
-  const { handleLogin } = useContext(AuthContext); // ✅ use handleLogin
+  const { handleLogin } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user"); // default role
+  const [skills, setSkills] = useState(""); // skills input
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
@@ -172,7 +170,7 @@ const RegisterPage = () => {
     try {
       const res = await axios.post(
         "https://task-assigner-backend-8184.onrender.com/api/auth/register",
-        { name, email, password },
+        { name, email, password, role, skills },
         {
           headers: {
             "Content-Type": "application/json",
@@ -180,9 +178,8 @@ const RegisterPage = () => {
         }
       );
 
-      // ✅ use login function after registration
       if (res.data.token) {
-        await handleLogin(email, password); // call login with same creds
+        await handleLogin(email, password);
       }
 
       setSuccess("Registration successful! Redirecting...");
@@ -202,12 +199,12 @@ const RegisterPage = () => {
     <Container className="d-flex align-items-center justify-content-center min-vh-100">
       <div
         style={{
-          maxWidth: "400px",
+          maxWidth: "420px",
           width: "100%",
           background: "#fff",
           padding: "2rem",
-          borderRadius: "10px",
-          boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+          borderRadius: "12px",
+          boxShadow: "0 0 15px rgba(0,0,0,0.1)",
         }}
       >
         <h3 className="text-center fw-bold mb-4">Create your account</h3>
@@ -245,6 +242,41 @@ const RegisterPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              size="lg"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="role" className="mb-3">
+            <Form.Label>Register As</Form.Label>
+            <div>
+              <Form.Check
+                inline
+                type="radio"
+                label="User"
+                name="role"
+                value="user"
+                checked={role === "user"}
+                onChange={(e) => setRole(e.target.value)}
+              />
+              <Form.Check
+                inline
+                type="radio"
+                label="Creator"
+                name="role"
+                value="creator"
+                checked={role === "creator"}
+                onChange={(e) => setRole(e.target.value)}
+              />
+            </div>
+          </Form.Group>
+
+          <Form.Group controlId="skills" className="mb-3">
+            <Form.Label>Skills</Form.Label>
+            <Form.Control
+              type="text"
+              // placeholder="e.g. React, Python, UI Design"
+              value={skills}
+              onChange={(e) => setSkills(e.target.value)}
               size="lg"
             />
           </Form.Group>
