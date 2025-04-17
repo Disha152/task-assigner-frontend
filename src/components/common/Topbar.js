@@ -280,8 +280,9 @@ const Topbar = () => {
                 <Dropdown.Menu>
                   <Dropdown.Item as={Link} to="/profile">Personal Details</Dropdown.Item>
                   <Dropdown.Item as={Link} to="/submissions">My Submissions</Dropdown.Item>
+                  
                   <Dropdown.Item as={Link} to="/saved-tasks">Saved Tasks</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/messages">Messages</Dropdown.Item>
+                  {/* <Dropdown.Item as={Link} to="/messages">Messages</Dropdown.Item> */}
                   <Dropdown.Item onClick={logoutAndRedirect}>Logout</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

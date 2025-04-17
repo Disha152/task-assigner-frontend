@@ -1,0 +1,53 @@
+.custom-save-btn {
+    background-color: white !important;
+    color: #5624d0 !important;
+    border: 1px solid #5624d0 !important;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-save-btn:hover {
+    background-color: #5624d0 !important;
+    color: white !important;
+  }
+  body.modal-open {
+    overflow: hidden;
+  }
+  /* Custom styling for buttons */
+.custom-buttons-container {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Add space between buttons */
+  }
+  
+  .custom-save-btn, .raise-dispute-btn {
+    /* Ensure buttons don't take full width */
+    display: inline-block;
+    width: auto;
+  }
+  
+  .raise-dispute-btn {
+    /* Add custom styles for the "Raise Dispute" button */
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    color: white;
+    transition: all 0.3s ease;
+  }
+  
+  .raise-dispute-btn:hover {
+    background-color: white;
+    color: #dc3545;
+  }
+  
+  .custom-save-btn {
+    /* Save button styles */
+    background-color: white;
+    color: #5624d0;
+    border: 1px solid #5624d0;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-save-btn:hover {
+    background-color: #5624d0;
+    color: white;
+  }
+  

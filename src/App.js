@@ -20,6 +20,8 @@ import ReviewApplications from './pages/ReviewApplications';
 import CreatorSubmissions from "./pages/CreatorSubmissions"; 
 import AllTasks from "./pages/AllTasks";
 import AllSubmissions from "./pages/AllSubmissions";
+import MySubmissions from "./pages/MySubmissions";
+import SavedTasks from "./pages/SavedTasks";
 
 
 
@@ -49,6 +51,9 @@ function App() {
             <Route path="/creator-submissions" element={<CreatorSubmissions />} />
             <Route path="/all-tasks" element={<AllTasks />} />
             <Route path="/all-submissions" element={<AllSubmissions />} />
+            <Route path="/submissions" element={<MySubmissions />} />
+            <Route path="/saved-tasks" element={<SavedTasks />} />
+
 
 
 

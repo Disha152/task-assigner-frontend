@@ -16,3 +16,20 @@ body {
 .card {
   margin-bottom: 15px;
 }
+
+
+.custom-save-btn {
+  background-color: white;
+  color: #5624d0;
+  border: 1px solid #5624d0;
+}
+
+.custom-save-btn:hover {
+  background-color: white;
+  color: #5624d0;
+  border: 1px solid #5624d0;
+}
+body.modal-open {
+  overflow: hidden;
+}
+
