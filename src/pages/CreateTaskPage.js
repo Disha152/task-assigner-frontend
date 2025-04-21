@@ -251,6 +251,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Form, Button, Container, Alert } from "react-bootstrap";
+import { useEffect } from "react";
 
 const CreateTaskPage = () => {
   const [title, setTitle] = useState("");
@@ -268,6 +269,8 @@ const CreateTaskPage = () => {
   const [additionalNotes, setAdditionalNotes] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [categories, setCategories] = useState([]);
+ 
 
   const handleFileChange = (e) => {
     setFiles(e.target.files);
@@ -348,9 +351,29 @@ const CreateTaskPage = () => {
     }
   };
 
-  const categories = [
-    "Software Development", "Data Science", "Cybersecurity", "Cloud Computing", "UI/UX Design", "DevOps", "Business", "Marketing", "Sales", "Human Resources", "Design", "Writing", "Graphic Design", "Video Production", "Photography", "Music Production", "Project Management", "Virtual Assistance", "Customer Support", "Research Assistance", "Others"
-  ];
+ 
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const creatorToken = localStorage.getItem("token");
+      try {
+        const res = await axios.get(
+          "https://task-assigner-backend-8184.onrender.com/api/categories",
+          {
+            headers: {
+              Authorization: `Bearer ${creatorToken}`, // replace with your actual token variable
+            },
+          }
+        );
+        setCategories(res.data);
+      } catch (err) {
+        console.error("Failed to fetch categories", err);
+      }
+    };
+  
+    fetchCategories();
+  }, []);
+
 
   return (
     <Container className="py-5" style={{ maxWidth: "600px" }}>
@@ -387,14 +410,15 @@ const CreateTaskPage = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Category</Form.Label>
-          <Form.Control as="select" value={category} onChange={(e) => setCategory(e.target.value)} required>
-            <option value="">Select a category</option>
-            {categories.map((cat, idx) => (
-              <option key={idx} value={cat}>{cat}</option>
-            ))}
-          </Form.Control>
-        </Form.Group>
+  <Form.Label>Category</Form.Label>
+  <Form.Control as="select" value={category} onChange={(e) => setCategory(e.target.value)} required>
+    <option value="">Select a category</option>
+    {categories.map((cat) => (
+      <option key={cat._id} value={cat.name}>{cat.name}</option>
+    ))}
+  </Form.Control>
+</Form.Group>
+
 
         {category && category !== "Others" && (
           <Form.Group className="mb-3">

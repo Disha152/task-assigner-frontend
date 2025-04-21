@@ -6,8 +6,6 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import CountUp from "react-countup";
 import animationOne from "../assets/1.json";
 import animationTwo from "../assets/header.json";
-import shadow from "../assets/shadow.json";
-
 import animationThree from "../assets/3.json";
 import userIcon from "../assets/user.svg";
 import taskIcon from "../assets/task.svg";

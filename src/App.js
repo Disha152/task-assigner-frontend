@@ -24,6 +24,8 @@ import MySubmissions from "./pages/MySubmissions";
 import SavedTasks from "./pages/SavedTasks";
 import CategoryTasksPage from "./pages/CategoryTasksPage"; // adjust path accordingly
 import SkillTasksPage from './pages/SkillsTasks';
+import AdminCategoryManager from "./components/admin/CreatorManager"; // adjust path if needed
+
            
 
 
@@ -59,9 +61,10 @@ function App() {
             <Route path="/saved-tasks" element={<SavedTasks />} />
             <Route path="/category/:categoryName" element={<CategoryTasksPage />} />
             
+            
 
             <Route path="/tasks/skills/:skill" element={<SkillTasksPage />} />
-
+            <Route path="/admin/categories" element={<AdminCategoryManager />} />
 
 
           </Routes>
