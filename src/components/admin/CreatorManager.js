@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Table, Button, Form, Alert } from "react-bootstrap";
+import { Container, Table, Button, Form, Alert, Collapse, ListGroup } from "react-bootstrap";
 
 const AdminCategoryManager = () => {
   const [categories, setCategories] = useState([]);
+  const [expandedCategoryId, setExpandedCategoryId] = useState(null);
   const [newCategory, setNewCategory] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingName, setEditingName] = useState("");
@@ -20,6 +21,21 @@ const AdminCategoryManager = () => {
       setCategories(res.data);
     } catch (err) {
       setError("Failed to fetch categories");
+    }
+  };
+
+  const fetchSubcategories = async (categoryId) => {
+    try {
+      const res = await axios.get(
+        `https://task-assigner-backend-8184.onrender.com/api/categories/${categoryId}/subcategories`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const updatedCategories = categories.map((cat) =>
+        cat._id === categoryId ? { ...cat, subcategories: res.data } : cat
+      );
+      setCategories(updatedCategories);
+    } catch (err) {
+      console.error("Failed to fetch subcategories");
     }
   };
 
@@ -76,6 +92,14 @@ const AdminCategoryManager = () => {
     }
   };
 
+  const toggleExpand = async (categoryId) => {
+    const isExpanded = expandedCategoryId === categoryId;
+    setExpandedCategoryId(isExpanded ? null : categoryId);
+    if (!isExpanded) {
+      await fetchSubcategories(categoryId);
+    }
+  };
+
   return (
     <Container className="py-5">
       <h2 className="mb-4 text-center fw-bold">Category Manager</h2>
@@ -99,44 +123,71 @@ const AdminCategoryManager = () => {
         <thead>
           <tr>
             <th>Category Name</th>
-            <th style={{ width: "180px" }}>Actions</th>
+            <th style={{ width: "200px" }}>Actions</th>
           </tr>
         </thead>
         <tbody>
           {categories.map((cat) => (
-            <tr key={cat._id}>
-              <td>
-                {editingId === cat._id ? (
-                  <Form.Control
-                    value={editingName}
-                    onChange={(e) => setEditingName(e.target.value)}
-                  />
-                ) : (
-                  cat.name
-                )}
-              </td>
-              <td>
-                {editingId === cat._id ? (
-                  <>
-                    <Button size="sm" variant="success" onClick={() => handleUpdate(cat._id)}>
-                      Save
-                    </Button>{" "}
-                    <Button size="sm" variant="secondary" onClick={() => setEditingId(null)}>
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button size="sm" variant="warning" onClick={() => handleEdit(cat._id, cat.name)}>
-                      Edit
-                    </Button>{" "}
-                    <Button size="sm" variant="danger" onClick={() => handleDelete(cat._id)}>
-                      Delete
-                    </Button>
-                  </>
-                )}
-              </td>
-            </tr>
+            <React.Fragment key={cat._id}>
+              <tr>
+                <td>
+                  {editingId === cat._id ? (
+                    <Form.Control
+                      value={editingName}
+                      onChange={(e) => setEditingName(e.target.value)}
+                    />
+                  ) : (
+                    cat.name
+                  )}
+                </td>
+                <td>
+                  {editingId === cat._id ? (
+                    <>
+                      <Button size="sm" variant="success" onClick={() => handleUpdate(cat._id)}>
+                        Save
+                      </Button>{" "}
+                      <Button size="sm" variant="secondary" onClick={() => setEditingId(null)}>
+                        Cancel
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button size="sm" variant="warning" onClick={() => handleEdit(cat._id, cat.name)}>
+                        Edit
+                      </Button>{" "}
+                      <Button size="sm" variant="danger" onClick={() => handleDelete(cat._id)}>
+                        Delete
+                      </Button>{" "}
+                      <Button
+                        size="sm"
+                        variant="info"
+                        onClick={() => toggleExpand(cat._id)}
+                      >
+                        {expandedCategoryId === cat._id ? "Hide Subcategories" : "View Subcategories"}
+                      </Button>
+                    </>
+                  )}
+                </td>
+              </tr>
+
+              <tr>
+                <td colSpan="2" style={{ padding: 0, border: "none" }}>
+                  <Collapse in={expandedCategoryId === cat._id}>
+                    <div>
+                      <ListGroup variant="flush" className="ms-3 my-2">
+                        {cat.subcategories && cat.subcategories.length > 0 ? (
+                          cat.subcategories.map((sub, i) => (
+                            <ListGroup.Item key={i}>{sub.name}</ListGroup.Item>
+                          ))
+                        ) : (
+                          <ListGroup.Item className="text-muted">No subcategories</ListGroup.Item>
+                        )}
+                      </ListGroup>
+                    </div>
+                  </Collapse>
+                </td>
+              </tr>
+            </React.Fragment>
           ))}
         </tbody>
       </Table>

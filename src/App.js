@@ -25,6 +25,7 @@ import SavedTasks from "./pages/SavedTasks";
 import CategoryTasksPage from "./pages/CategoryTasksPage"; // adjust path accordingly
 import SkillTasksPage from './pages/SkillsTasks';
 import AdminCategoryManager from "./components/admin/CreatorManager"; // adjust path if needed
+import SubcategoryManager from "./components/admin/SubCategoryManager";
 
            
 
@@ -65,6 +66,7 @@ function App() {
 
             <Route path="/tasks/skills/:skill" element={<SkillTasksPage />} />
             <Route path="/admin/categories" element={<AdminCategoryManager />} />
+            <Route path="/admin/subcategories" element={<SubcategoryManager />} />
 
 
           </Routes>
