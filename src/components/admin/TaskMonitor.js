@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaTrash, FaExclamationTriangle, FaCheckCircle } from 'react-icons/fa';
 
 const TaskMonitor = () => {
   const [tasks, setTasks] = useState([]);
@@ -25,7 +26,7 @@ const TaskMonitor = () => {
   // Delete a task
   const deleteTask = async (taskId) => {
     try {
-      await axios.delete(`http://localhost:6000/api/tasks/${taskId}`, {
+      await axios.delete(`https://task-assigner-backend-8184.onrender.com/api/tasks/${taskId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -41,7 +42,7 @@ const TaskMonitor = () => {
   // Reject a task
   const rejectTask = async (taskId) => {
     try {
-      await axios.put(`http://localhost:6000/api/admin/tasks/${taskId}/reject`, {}, {
+      await axios.put(`https://task-assigner-backend-8184.onrender.com/api/admin/tasks/${taskId}/reject`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -54,41 +55,76 @@ const TaskMonitor = () => {
     }
   };
 
+  // Approve a task (using updated public route with admin token)
+const approveTask = async (taskId) => {
+  try {
+    await axios.put(`https://task-assigner-backend-8184.onrender.com/api/tasks/${taskId}/approve`, {}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    alert("Task approved!");
+    fetchTasks();
+  } catch (error) {
+    console.error("Error approving task:", error);
+    alert("Failed to approve task.");
+  }
+};
+
+
   useEffect(() => {
     fetchTasks();
   }, []);
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Task Monitor</h2>
+    <div className="task-container">
+      <h2 className="task-header">Task Monitor</h2>
+      
       {loading ? (
-        <p>Loading tasks...</p>
+        <div className="loading-message">Loading tasks...</div>
       ) : tasks.length === 0 ? (
-        <p>No tasks available.</p>
+        <div className="no-tasks">No tasks available.</div>
       ) : (
-        <ul className="space-y-4">
+        <div className="task-grid">
           {tasks.map((task) => (
-            <li key={task._id} className="p-4 border rounded shadow">
-              <p><strong>Title:</strong> {task.title}</p>
+            <div key={task._id} className="task-card">
+              <h3 className="task-title">{task.title}</h3>
               <p><strong>Description:</strong> {task.description}</p>
-              <div className="flex flex-row gap-4 mt-3">
+              <p><strong>Status:</strong> {task.status}</p> {/* Displaying the task's current status */}
+              <div className="button-container">
   <button
-    className="bg-red-500 text-black px-4 py-1 rounded hover:bg-red-600 transition"
+    className="delete-btn"
     onClick={() => deleteTask(task._id)}
   >
-    Delete
+    {/* <FaTrash className="icon" /> */}
+     Delete
   </button>
   <button
-    className="bg-yellow-500 text-black px-4 py-1 rounded hover:bg-yellow-600 transition"
-    onClick={() => rejectTask(task._id)}
-  >
-    Reject
-  </button>
+  className="reject-btn"
+  onClick={() => rejectTask(task._id)}
+  disabled={task.status === 'rejected'}
+  style={{
+    backgroundColor: task.status === 'rejected' ? '#ccc' : '',
+    cursor: task.status === 'rejected' ? 'not-allowed' : 'pointer'
+  }}
+>
+  {task.status === 'rejected' ? 'Rejected' : 'Reject'}
+</button>
+
+<button
+  className="approve-btn"
+  onClick={() => approveTask(task._id)}
+  disabled={task.status !== 'pending'}
+>
+  Approve
+</button>
+
 </div>
 
-            </li>
+              
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

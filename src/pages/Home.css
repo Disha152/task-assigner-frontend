@@ -1,4 +1,108 @@
+.hover-lift:hover {
+  transform: translateY(-6px);
+}
 
+
+.task-card-custom {
+  height: 100%;
+  min-height: 350px; /* Adjust based on your content */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 16px;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f0f4ff, #dbe9ff); /* optional gradient */
+  font-family: "Fira Sans", sans-serif;
+  transition: transform 0.3s ease;
+}
+
+.task-card-custom:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+.card-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Number of lines */
+  -webkit-box-orient: vertical;
+}
+
+.infinite-carousel-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.infinite-carousel {
+  display: flex;
+  animation: scrollLoop 60s linear infinite;
+  width: max-content;
+}
+/* .infinite-carousel-alt {
+  display: flex;
+  animation: scrollLoop1 60s linear infinite;
+  width: 100%
+} */
+
+.infinite-carousel .task-card-wrapper {
+  flex: 0 0 auto;
+  width: 300px;
+  margin-right: 20px;
+}
+.infinite-carousel-alt .task-card-wrapper {
+  flex: 0 0 auto;
+  width: 300px;
+  margin-right: 20px;
+}
+
+@keyframes scrollLoop1 {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes scrollLoop {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-horizontal {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.scroll-wrapper {
+  scroll-snap-type: x mandatory;
+  display: flex;
+  overflow-x: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+  animation: scroll-horizontal 60s linear infinite;
+}
+
+.scroll-wrapper::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+
+.scroll-container {
+  display: flex;
+  flex-direction: column; /* Important */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 
 .hero-section {
     background-color: #f5f0ff;

@@ -32,6 +32,45 @@ const Topbar = () => {
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const placeholderOptions = [
+    "Search for tasks...",
+    "Search for categories...",
+    "Search for skills...",
+  ];
+  
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [animatedPlaceholder, setAnimatedPlaceholder] = useState(placeholderOptions[0]);
+  
+  useEffect(() => {
+    let charIndex = 0;
+    let current = placeholderOptions[placeholderIndex];
+    let typingForward = true;
+  
+    const typeInterval = setInterval(() => {
+      if (typingForward) {
+        if (charIndex <= current.length) {
+          setAnimatedPlaceholder(current.slice(0, charIndex));
+          charIndex++;
+        } else {
+          typingForward = false;
+          setTimeout(() => {}, 1000);
+        }
+      } else {
+        if (charIndex > 0) {
+          charIndex--;
+          setAnimatedPlaceholder(current.slice(0, charIndex));
+        } else {
+          typingForward = true;
+          setPlaceholderIndex((prevIndex) => (prevIndex + 1) % placeholderOptions.length);
+          current = placeholderOptions[(placeholderIndex + 1) % placeholderOptions.length];
+        }
+      }
+    }, 100); // adjust speed
+  
+    return () => clearInterval(typeInterval);
+  }, [placeholderIndex]);
+  
+
   const navigate = useNavigate();
   const dropdownRef = useRef();
 
@@ -115,7 +154,7 @@ const Topbar = () => {
           <Form className="position-relative mx-lg-auto w-100" style={{ maxWidth: "450px" }} ref={dropdownRef}>
   <InputGroup>
     <FormControl
-      placeholder="Search for tasks..."
+      placeholder={animatedPlaceholder}
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
       onFocus={() => {

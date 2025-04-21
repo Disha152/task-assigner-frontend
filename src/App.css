@@ -1,8 +1,708 @@
+/* Fira Sans usage */
+/* Dispute Manager Styles */
+/* Task Monitor Styles */
+/* Global styles */
+/* CSS for category, subcategory, and attachments */
+
+
+/* In your CSS file */
+.custom-card {
+  width: 275px !important;  /* Forcefully sets the width */
+  height: 375px !important; /* Ensures the height stays the same */
+  margin-right: 1rem; /* Adjusts spacing between the cards */
+}
+.text-pink {
+  color: #e91e63;
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px #e91e63;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600;700&display=swap');
+
+.font-fira {
+  font-family: 'Fira Sans', sans-serif;
+}
+
+h1.display-5 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #212529;
+}
+
+.meta-info {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+.meta-info strong {
+  color: #343a40;
+}
+
+.badge {
+  font-size: 0.8rem;
+  padding: 0.4em 0.6em;
+  border-radius: 0.5rem;
+}
+
+.section-header {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #0d6efd;
+  padding-left: 0.75rem;
+  color: #212529;
+}
+
+ul.custom-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.custom-list li::before {
+  content: "✅";
+  margin-right: 0.5rem;
+  color: #198754;
+}
+
+ul.simple-list {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  color: #495057;
+}
+
+.attachments-list li a {
+  color: #0d6efd;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.attachments-list li a:hover {
+  text-decoration: underline;
+  color: #0a58ca;
+}
+
+.comment-block {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.comment-block .stars {
+  font-size: 1.1rem;
+  color: #ffc107;
+  margin-bottom: 0.25rem;
+}
+
+.comment-block .author {
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 0.25rem;
+}
+
+.comment-block p {
+  margin: 0;
+  color: #495057;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600;700&display=swap');
+
+.font-fira {
+  font-family: 'Fira Sans', sans-serif;
+}
+
+ul {
+  padding-left: 1rem;
+}
+
+h4 {
+  font-size: 1.4rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+.task-category, .task-subcategory {
+  margin-bottom: 15px;
+}
+
+.task-category strong, .task-subcategory strong {
+  font-size: 1.1rem;
+  color: #007bff;
+  margin-right: 10px;
+}
+
+.badge-category, .badge-subcategory {
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  border-radius: 50px;
+  color: white;
+  text-transform: capitalize;
+  margin-right: 5px;  /* Adds spacing between badges */
+}
+
+.badge-category {
+  background-color: #28a745;  /* Green for category */
+}
+
+.badge-subcategory {
+  background-color: #17a2b8;  /* Blue for subcategory */
+}
+
+.task-attachments ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.task-attachments a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.task-attachments a:hover {
+  text-decoration: underline;
+}
+
+.card {
+  border-radius: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.task-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.task-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.task-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+}
+
+.button-container button {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.reject-btn {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.reject-btn:hover {
+  background-color: #e0a800;
+}
+
+.approve-btn {
+  background-color: #28a745;
+}
+
+.approve-btn:hover {
+  background-color: #218838;
+}
+
+.approve-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.task-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.task-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.task-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+button {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.reject-btn {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.reject-btn:hover {
+  background-color: #e0a800;
+}
+
+.approve-btn {
+  background-color: #28a745;
+}
+
+.approve-btn:hover {
+  background-color: #218838;
+}
+
+.approve-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f6fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container for user list */
+.user-list-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #00b894, #00cec9);
+  border-radius: 15px;
+}
+
+/* Header Style */
+.header {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+/* User Cards Grid */
+.user-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Individual User Card */
+.user-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* User Info */
+.user-info {
+  margin-bottom: 20px;
+}
+
+.user-name,
+.user-email,
+.user-role {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Hover effect on user card */
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Delete Button */
+.delete-btn {
+  padding: 8px 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* Delete button hover effect */
+.delete-btn:hover {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  transform: scale(1.05);
+}
+
+/* Icon inside delete button */
+.delete-btn svg {
+  margin-right: 8px;
+}
+
+.task-container {
+  
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc);
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  border-radius: 15px;
+}
+
+.task-header {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.loading-message, .no-tasks {
+  text-align: center;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Grid with auto-fill and minimum width of 300px */
+  gap: 20px;
+  padding: 0;
+}
+
+.task-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.task-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.delete-btn, .reject-btn {
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  transform: scale(1.05);
+}
+
+.reject-btn {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.reject-btn:hover {
+  background: linear-gradient(135deg, #e67e22, #f39c12);
+  transform: scale(1.05);
+}
+
+.icon {
+  margin-right: 8px;
+}
+
+.dispute-container {
+  padding: 40px;
+  background: linear-gradient(135deg , #00b894, #00cec9 100%);
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 15px;
+}
+
+.dispute-header {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.loading-message, .no-disputes {
+  text-align: center;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.dispute-list {
+  list-style: none;
+  padding: 0;
+}
+
+.dispute-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dispute-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.task-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.status-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.status-badge {
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-resolved {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-pending {
+  background-color: #ffc107;
+  color: white;
+}
+
+.status-default {
+  background-color: #dc3545;
+  color: white;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.resolve-btn {
+  background: linear-gradient(135deg, #00b894, #00cec9);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.resolve-btn:hover {
+  background: linear-gradient(135deg, #00cec9, #00b894);
+  transform: scale(1.05);
+}
+
+.resolve-btn .icon {
+  margin-right: 8px;
+}
+
+.status-icon {
+  font-size: 1.5rem;
+  color: #f39c12;
+}
+
+.resolved {
+  color: #28a745;
+}
+
+.unresolved {
+  color: #e74c3c;
+}
+
+.fira-sans-bold {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 700;
+}
+
+.fira-sans-regular {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 400;
+}
+
+.fira-sans-semibold {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 600;
+}
+
+/* Gradient + shadow effect for the card */
+.task-card-custom {
+  background: linear-gradient(145deg, #ffffff, #f1f1f1);
+  border: none;
+  border-radius: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-card-custom:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Horizontal scroll */
+.scroll-wrapper {
+  scroll-snap-type: x mandatory;
+  animation: scroll-horizontal 30s linear infinite;
+}
+
+/* Optional: Slow auto-scroll effect */
+@keyframes scroll-horizontal {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Override Card text color on hover */
+.task-card-custom:hover .card-title,
+.task-card-custom:hover .card-text,
+.task-card-custom:hover p {
+  color: #000;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f9fa;
+  font-family: 'Fira Sans', sans-serif;
+
 }
 
 .container {

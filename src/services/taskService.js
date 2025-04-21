@@ -21,10 +21,10 @@ export const getTaskById = async (taskId) => {
   return response.data;
 };
 
-export const applyToTask = async (taskId, token) => {
+export const applyToTask = async (taskId, token, coverLetter = '') => {
   const response = await axios.post(
     `${API_URL}/${taskId}/apply`,
-    {},
+    { coverLetter }, // Send cover letter in request body
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -33,6 +33,7 @@ export const applyToTask = async (taskId, token) => {
   );
   return response.data;
 };
+
 
 export const submitTask = async (taskId, submissionData, token) => {
   const response = await axios.post(`${API_URL}/submit/${taskId}`, submissionData, {
@@ -51,3 +52,16 @@ export const reviewSubmission = async (taskId, reviewData, token) => {
   });
   return response.data;
 };
+
+
+const assignUser = async (userId) => {
+  try {
+    const res = await axios.post(`/api/tasks/${taskId}/assign/${userId}`);
+    alert(res.data.message);
+    fetchApplicants(); // refresh the list
+  } catch (err) {
+    console.error(err);
+    alert('Failed to assign user');
+  }
+};
+

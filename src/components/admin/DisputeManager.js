@@ -1,78 +1,9 @@
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
 
-// const DisputeManager = () => {
-//   const [disputes, setDisputes] = useState([]);
-//   const [loading, setLoading] = useState(false);
 
-//   // Fetch all disputes
-//   const fetchDisputes = async () => {
-//     try {
-//       setLoading(true);
-//       const response = await axios.get("https://task-assigner-backend-8184.onrender.com/api/disputes", {
-//         headers: {
-//           Authorization: `Bearer ${localStorage.getItem("token")}`,
-//         },
-//       });
-//       setDisputes(response.data);
-//     } catch (error) {
-//       console.error("Error fetching disputes:", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
 
-//   // Resolve a specific dispute
-//   const handleResolve = async (disputeId) => {
-//     try {
-//       await axios.get(`https://task-assigner-backend-8184.onrender.com/api/disputes/${disputeId}/resolve`, {
-//         headers: {
-//           Authorization: `Bearer ${localStorage.getItem("token")}`,
-//         },
-//       });
-//       alert("Dispute resolved!");
-//       fetchDisputes(); // Refresh the list
-//     } catch (error) {
-//       console.error("Error resolving dispute:", error);
-//       alert("Failed to resolve the dispute.");
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchDisputes();
-//   }, []);
-
-//   return (
-//     <div className="p-6">
-//       <h2 className="text-xl font-semibold mb-4">Dispute Manager</h2>
-//       {loading ? (
-//         <p>Loading disputes...</p>
-//       ) : disputes.length === 0 ? (
-//         <p>No disputes found.</p>
-//       ) : (
-//         <ul className="space-y-4">
-//           {disputes.map((dispute) => (
-//             <li key={dispute._id} className="p-4 border rounded shadow">
-//               <p><strong>Task:</strong> {dispute.taskTitle}</p>
-//               <p><strong>User:</strong> {dispute.userEmail}</p>
-//               <p><strong>Reason:</strong> {dispute.reason}</p>
-//               <button
-//                 className="mt-2 bg-green-500 text-black px-4 py-1 rounded hover:bg-green-600"
-//                 onClick={() => handleResolve(dispute._id)}
-//               >
-//                 Resolve
-//               </button>
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default DisputeManager;
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaCheckCircle } from 'react-icons/fa';
 
 const DisputeManager = () => {
   const [disputes, setDisputes] = useState([]);
@@ -87,26 +18,40 @@ const DisputeManager = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setDisputes(response.data);
+
+      // Filter out resolved disputes
+      setDisputes(response.data.filter((dispute) => dispute.status !== "resolved"));
     } catch (error) {
-      console.error("Error fetching disputes:", error);
+      console.error("Error fetching disputes:", error.response?.data || error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  // Resolve a specific dispute
+  // Handle dispute resolution
   const handleResolve = async (disputeId) => {
+    const resolution = prompt("Enter resolution message:");
+    if (!resolution || resolution.trim() === "") {
+      alert("Resolution is required.");
+      return;
+    }
     try {
-      await axios.get(`https://task-assigner-backend-8184.onrender.com/api/disputes/${disputeId}/resolve`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      await axios.put(
+        `https://task-assigner-backend-8184.onrender.com/api/disputes/${disputeId}/resolve`,
+        {
+          status: "resolved", // Ensure lowercase to match schema enum
+          resolution,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       alert("Dispute resolved!");
-      fetchDisputes(); // Refresh the list
+      fetchDisputes(); // Refresh disputes list
     } catch (error) {
-      console.error("Error resolving dispute:", error);
+      console.error("Error resolving dispute:", error.response?.data || error.message);
       alert("Failed to resolve the dispute.");
     }
   };
@@ -115,28 +60,46 @@ const DisputeManager = () => {
     fetchDisputes();
   }, []);
 
+  const renderStatusColor = (status) => {
+    if (status === 'resolved') return 'status-resolved';
+    if (status === 'open') return 'status-pending';
+    if (status === 'rejected') return 'status-rejected';
+    return 'status-default';
+  };
+
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-semibold mb-4">Dispute Manager</h2>
+    <div className="dispute-container">
+      <h2 className="dispute-header">Dispute Manager</h2>
+
       {loading ? (
-        <p>Loading disputes...</p>
+        <div className="loading-message">Loading disputes...</div>
       ) : disputes.length === 0 ? (
-        <p>No disputes found.</p>
+        <div className="no-disputes">No disputes found.</div>
       ) : (
-        <ul className="space-y-4">
+        <ul className="dispute-list">
           {disputes.map((dispute) => (
-            <li key={dispute._id} className="p-4 border rounded shadow">
-              <p><strong>Task:</strong> {dispute.task?.title || "N/A"}</p>
+            <li key={dispute._id} className="dispute-card">
+              <div className="task-title">{dispute.task?.title || "N/A"}</div>
               <p><strong>User:</strong> {dispute.raisedBy?.email || "N/A"}</p>
               <p><strong>Reason:</strong> {dispute.reason}</p>
-              <p><strong>Status:</strong> {dispute.status}</p>
-              <p><strong>Resolution:</strong> {dispute.resolution || "Pending"}</p>
-              <button
-                className="mt-2 bg-green-500 text-black px-4 py-1 rounded hover:bg-green-600"
-                onClick={() => handleResolve(dispute._id)}
-              >
-                Resolve
-              </button>
+              <div className="status-container">
+                <span className={`status-badge ${renderStatusColor(dispute.status)}`}>
+                  {dispute.status}
+                </span>
+                <span><strong>Resolution:</strong> {dispute.resolution || "Pending"}</span>
+              </div>
+
+              <div className="button-container">
+                {dispute.status !== 'resolved' && (
+                  <button
+                    className="resolve-btn"
+                    onClick={() => handleResolve(dispute._id)}
+                  >
+                    <FaCheckCircle className="icon" />
+                    Resolve
+                  </button>
+                )}
+              </div>
             </li>
           ))}
         </ul>

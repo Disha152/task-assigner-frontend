@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { applyToTask } from '../../services/taskService'; // ✅ Named import
-import { AuthContext } from '../../context/AuthContext'; // Assuming you use context to get token
+import { applyToTask } from '../../services/taskService';
+import { AuthContext } from '../../context/AuthContext';
 
 const ApplyTaskModal = ({ taskId, onClose }) => {
   const [coverLetter, setCoverLetter] = useState('');
@@ -9,12 +9,12 @@ const ApplyTaskModal = ({ taskId, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await applyToTask(taskId, token); // ✅ Use the named function directly
-      alert('Applied successfully!');
+      const response = await applyToTask(taskId, token, coverLetter); 
+      alert(response.message);
       if (onClose) onClose();
     } catch (error) {
       console.error('Error applying to task:', error);
-      alert('Failed to apply.');
+      alert(error.response?.data?.message || 'Failed to apply.');
     }
   };
 

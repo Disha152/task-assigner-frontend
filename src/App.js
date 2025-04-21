@@ -22,6 +22,9 @@ import AllTasks from "./pages/AllTasks";
 import AllSubmissions from "./pages/AllSubmissions";
 import MySubmissions from "./pages/MySubmissions";
 import SavedTasks from "./pages/SavedTasks";
+import CategoryTasksPage from "./pages/CategoryTasksPage"; // adjust path accordingly
+import SkillTasksPage from './pages/SkillsTasks';
+           
 
 
 
@@ -47,17 +50,18 @@ function App() {
             <Route path="/task/:id" element={<TaskDetail />} />
             <Route path="/submit-task/:taskId" element={<SubmitTaskForm />} />
             <Route path="/my-tasks" element={<MyTasksPage />} />
-            <Route path="/task/:id/applications" element={<ReviewApplications />} />
+            {/* <Route path="/task/:id/applications" element={<ReviewApplications />} /> */}
+            <Route path="/tasks/:taskId/review-applications" element={<ReviewApplications />} />
             <Route path="/creator-submissions" element={<CreatorSubmissions />} />
             <Route path="/all-tasks" element={<AllTasks />} />
             <Route path="/all-submissions" element={<AllSubmissions />} />
             <Route path="/submissions" element={<MySubmissions />} />
             <Route path="/saved-tasks" element={<SavedTasks />} />
-
-
-
-
+            <Route path="/category/:categoryName" element={<CategoryTasksPage />} />
             
+
+            <Route path="/tasks/skills/:skill" element={<SkillTasksPage />} />
+
 
 
           </Routes>

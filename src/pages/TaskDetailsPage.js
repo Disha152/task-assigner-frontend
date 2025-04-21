@@ -3,11 +3,22 @@
 
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Container, Card, Spinner, Badge, Button, Form } from "react-bootstrap";
+import {   Spinner, Form } from "react-bootstrap";
 import axios from "axios";
 import { FaStar } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import './taskDetailsPage.css';
+import { Container, Row, Col, Card, Button, Badge, ListGroup } from 'react-bootstrap';
+import AttachmentFile from "../assets/paperclip.png";
+import Comments from "../assets/comments.png";
+import Learn from "../assets/learn.png";
+import Requirements from "../assets/requirements.png";
+import  Working from "../assets/working.json";
+import Gradient from "../assets/gradient.json";
+import { Player } from '@lottiefiles/react-lottie-player'; // or use lottie-react
+
+
+
 
 
 
@@ -26,19 +37,45 @@ const TaskDetail = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [showDisputeModal, setShowDisputeModal] = useState(false);
 const [disputeReason, setDisputeReason] = useState("");
+ // Function to render badges for categories and subcategories
+ const renderBadges = (items, badgeClass) => {
+  return items.split(',').map((item, index) => (
+    <span key={index} className={`badge ${badgeClass}`}>{item.trim()}</span>
+  ));
+};
+const [liked, setLiked] = useState(false);
 
+  const toggleLike = () => setLiked(!liked);
 
   useEffect(() => {
+    // const fetchTask = async () => {
+    //   try {
+    //     const response = await axios.get(`https://task-assigner-backend-8184.onrender.com/api/tasks/${id}`);
+    //     setTask(response.data);
+    //     setLoading(false);
+    //   } catch (error) {
+    //     console.error("Error fetching task:", error);
+    //     setLoading(false);
+    //   }
+    // };
+
     const fetchTask = async () => {
       try {
         const response = await axios.get(`https://task-assigner-backend-8184.onrender.com/api/tasks/${id}`);
-        setTask(response.data);
+        const fetchedTask = response.data;
+    
+        console.log("Fetched task data:", fetchedTask); // Optional: Debugging
+    
+        setTask(fetchedTask);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching task:", error);
         setLoading(false);
       }
     };
+    
+   
+    
 
     const fetchComments = async () => {
       try {
@@ -113,41 +150,63 @@ const [disputeReason, setDisputeReason] = useState("");
       alert("Something went wrong while saving the task.");
     }
   };
+  const token = user?.token;
+if (!token) {
+  alert("Please login first");
+  return;
+}
 
   const handleApply = async (taskId) => {
-    const token = user?.token;
-    if (!token) {
-      alert("You must be logged in to apply for a task.");
-      return;
-    }
-
     try {
-      const response = await fetch(
-        `https://task-assigner-backend-8184.onrender.com/api/tasks/${taskId}/apply`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Application failed.");
-      alert(data.message);
-    } catch (error) {
-      alert(error.message || "Something went wrong while applying.");
+      const res = await fetch(`https://task-assigner-backend-8184.onrender.com/api/tasks/${taskId}/apply`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Replace with actual token logic
+        },
+        body: JSON.stringify({
+          coverLetter: "I'm very interested in this task and I believe I can do a great job!", // Optional
+        }),
+      });
+  
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message);
+      } else {
+        alert(data.message || "Error applying for task");
+      }
+    } catch (err) {
+      console.error("Apply failed:", err);
+      alert("Something went wrong while applying.");
     }
   };
+  
 
   const fetchApplicants = async () => {
     try {
-      const response = await axios.get(`https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/applications`);
-      setApplicants(response.data);
-      setShowApplicants(true);
+      const res = await fetch(`https://task-assigner-backend-8184.onrender.com/api/tasks/${task._id}/applications`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Replace with actual token logic
+        },
+      });
+  
+      const data = await res.json();
+  
+      if (res.ok) {
+        console.log("Applicants Queue:", data.applicantsQueue);
+        // You can now store it in state and render it in a modal or new section
+        setApplicants(data.applicantsQueue); // Example
+      } else {
+        alert(data.message || "Error fetching applications");
+      }
     } catch (err) {
-      alert("Failed to fetch applications.");
+      console.error("Fetching applications failed:", err);
+      alert("Something went wrong while fetching applications.");
     }
+  };
+  
+  const handleReviewApplications = () => {
+    navigate(`/tasks/${task._id}/review-applications`);
   };
 
   const fetchSubmissions = async () => {
@@ -251,209 +310,612 @@ const [disputeReason, setDisputeReason] = useState("");
 
   return (
     
-    <Container className="py-5">
-      <Card className="shadow p-4 border-0 position-relative">
+//     <Container className="py-5">
+//       <Card className="shadow p-4 border-0 position-relative">
 
-        <div className="custom-buttons-container">
-  {/* Save Button */}
-  <Button
-    className="custom-save-btn"
-    onClick={handleSave}
-    disabled={!user}
-  >
-    {isSaved ? "Unsave" : "Save"}
-  </Button>
+//         <div className="custom-buttons-container">
+//   {/* Save Button */}
+//   <Button
+//     className="custom-save-btn"
+//     onClick={handleSave}
+//     disabled={!user}
+//   >
+//     {isSaved ? "Unsave" : "Save"}
+//   </Button>
 
-  {/* Raise Dispute Button */}
-  <Button
-    className="raise-dispute-btn"
-    onClick={() => setShowDisputeModal(true)}
-    disabled={!user}
-  >
-    Raise Dispute
-  </Button>
+//   {/* Raise Dispute Button */}
+//   <Button
+//     className="raise-dispute-btn"
+//     onClick={() => setShowDisputeModal(true)}
+//     disabled={!user}
+//   >
+//     Raise Dispute
+//   </Button>
+// </div>
+
+
+//         <h2 className="fw-bold mb-3 text-primary">{task.title}</h2>
+//         <p className="text-muted">{new Date(task.createdAt).toLocaleDateString()}</p>
+
+//         <div className="mb-4">
+//           <strong>Description:</strong>
+//           <p>{task.description}</p>
+
+//           <strong>Budget:</strong>
+//           <p>₹{task.budget}</p>
+
+//           <strong>Deadline:</strong>
+//           <p>{new Date(task.deadline).toLocaleDateString()}</p>
+
+//           <strong>Required Skills:</strong>
+//           <div className="mb-2">
+//             {task.skills.map((skill, index) => (
+//               <Badge key={index} bg="secondary" className="me-2">
+//                 {skill}
+//               </Badge>
+//             ))}
+//           </div>
+
+          
+//         </div>
+
+      
+//         {/* Categories */}
+//       {task?.category && (
+//         <div className=" mb-4">
+//           <strong>Category:</strong>
+//           <div>{renderBadges(task.category, 'badge-category')}</div>
+//         </div>
+//       )}
+
+//       {/* Subcategories */}
+//       {task?.subcategory && (
+//         <div className=" mb-4">
+//           <strong>Subcategory:</strong>
+//           <div>{renderBadges(task.subcategory, 'badge-subcategory')}</div>
+//         </div>
+//       )}
+
+//      {/* Attachments */}
+// {task?.attachments && task.attachments.length > 0 && (
+//   <div className="task-attachments mb-4">
+//     <strong>Attachments:</strong>
+//     <ul>
+//       {task.attachments.map((file, index) => (
+//         <li key={index}>
+//           <a href={file} target="_blank" rel="noopener noreferrer">
+//             {file}
+//           </a>
+//         </li>
+//       ))}
+//     </ul>
+//   </div>
+// )}
+
+
+      
+
+
+//         <Card className="p-3 mb-4 bg-light">
+//           <h5 className="fw-bold">Posted By:</h5>
+//           <p><strong>Name:</strong> {task.creator?.name}</p>
+//           <p><strong>Email:</strong> {task.creator?.email}</p>
+//         </Card>
+
+//         <div className="mb-4">
+//           <h5 className="fw-bold">Rating:</h5>
+//           <div style={{ color: "#f5c518" }}>
+//             {[...Array(5)].map((_, i) => (
+//               <FaStar key={i} fill={i < 4.5 ? "#f5c518" : "#ddd"} />
+//             ))}
+//             <span className="ms-2 text-muted">4.5 / 5</span>
+//           </div>
+//         </div>
+
+//         <div className="mb-4">
+//           <h5 className="fw-bold">Leave a Comment</h5>
+//           <Form>
+//             <Form.Group controlId="commentBox">
+//               <Form.Control
+//                 as="textarea"
+//                 rows={3}
+//                 placeholder="Write your thoughts here..."
+//                 value={comment}
+//                 onChange={(e) => setComment(e.target.value)}
+//               />
+//             </Form.Group>
+//             <Button
+//               variant="primary"
+//               className="mt-2"
+//               style={{ backgroundColor: "#5624d0", borderColor: "#5624d0" }}
+//               onClick={handleCommentSubmit}
+//             >
+//               Submit Comment
+//             </Button>
+//           </Form>
+//         </div>
+
+//         <div className="mt-3">
+//           <h5 className="fw-bold">Previous Comments:</h5>
+//           {comments.length === 0 ? (
+//             <p>No comments yet.</p>
+//           ) : (
+//             comments.map((comment) => {
+//               const initials = comment.author?.name
+//                 ? comment.author.name
+//                     .split(" ")
+//                     .map((n) => n[0])
+//                     .join("")
+//                     .toUpperCase()
+//                 : "U";
+
+//               const formattedDate = new Date(comment.createdAt).toLocaleString();
+
+//               return (
+//                 <div
+//                   key={comment._id}
+//                   style={{
+//                     border: "1px solid #ddd",
+//                     borderRadius: "10px",
+//                     padding: "16px",
+//                     marginBottom: "12px",
+//                     display: "flex",
+//                     alignItems: "flex-start",
+//                     backgroundColor: "#fafafa",
+//                     boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+//                   }}
+//                 >
+//                   <div
+//                     style={{
+//                       width: "40px",
+//                       height: "40px",
+//                       borderRadius: "50%",
+//                       backgroundColor: "#4a90e2",
+//                       color: "white",
+//                       display: "flex",
+//                       alignItems: "center",
+//                       justifyContent: "center",
+//                       fontWeight: "bold",
+//                       fontSize: "16px",
+//                       marginRight: "12px",
+//                     }}
+//                   >
+//                     {initials}
+//                   </div>
+
+//                   <div>
+//                     <div style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "4px" }}>
+//                       {comment.author?.name || "Unknown"}
+//                     </div>
+//                     <div style={{ fontSize: "14px", color: "#666", marginBottom: "8px" }}>
+//                       {formattedDate}
+//                     </div>
+//                     <div style={{ fontSize: "15px", lineHeight: "1.5", color: "#333" }}>
+//                       {comment.text}
+//                     </div>
+//                   </div>
+//                 </div>
+//               );
+//             })
+//           )}
+//         </div>
+
+//         <div className="d-flex flex-column gap-3 mt-3">
+//           {!isCreator && (
+//             <>
+//               <Button
+//                 onClick={() => handleApply(task._id)}
+//                 variant="primary"
+//                 style={{
+//                   backgroundColor: "#5624d0",
+//                   borderColor: "#5624d0",
+//                   width: "100%",
+//                 }}
+//               >
+//                 Apply for Task
+//               </Button>
+
+//               <Button
+//                 onClick={() => navigate(`/submit-task/${task._id}`)}
+//                 variant="outline-primary"
+//                 style={{ width: "100%" }}
+//               >
+//                 Submit the Task
+//               </Button>
+//             </>
+//           )}
+
+//           {isCreator && (
+//             <>
+//              <Button
+//         onClick={handleReviewApplications}
+//         variant="outline-success"
+//         style={{ width: "100%" }}
+//       >
+//         Review Applications
+//       </Button>
+
+//               <Button
+//                 onClick={fetchSubmissions}
+//                 variant="outline-primary"
+//                 style={{ width: "100%" }}
+//               >
+//                 See All Submissions
+//               </Button>
+//             </>
+//           )}
+//         </div>
+//       </Card>
+//       {showDisputeModal && (
+//       <div className="modal show fade d-block" tabIndex="-1">
+//         <div className="modal-dialog">
+//           <div className="modal-content">
+//             <div className="modal-header">
+//               <h5 className="modal-title">Raise Dispute</h5>
+//               <button
+//                 type="button"
+//                 className="btn-close"
+//                 onClick={() => setShowDisputeModal(false)}
+//               ></button>
+//             </div>
+//             <div className="modal-body">
+//               <Form.Group>
+//                 <Form.Label>Reason for Dispute</Form.Label>
+//                 <Form.Control
+//                   as="textarea"
+//                   rows={3}
+//                   value={disputeReason}
+//                   onChange={(e) => setDisputeReason(e.target.value)}
+//                   placeholder="Describe the issue..."
+//                 />
+//               </Form.Group>
+//             </div>
+//             <div className="modal-footer">
+//               <Button variant="secondary" onClick={() => setShowDisputeModal(false)}>
+//                 Cancel
+//               </Button>
+//               <Button variant="danger" onClick={handleRaiseDispute}>
+//                 Submit Dispute
+//               </Button>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     )}
+//     </Container>
+<Container fluid className="p-4 font-fira">
+      <Row>
+        {/* Left Column - Main Content */}
+        <Col md={8}>
+        {/* <h1 className="display-5">Design a Logo for EcoStartup</h1> */}
+        <h1 
+  className="display-5" 
+  style={{
+    background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    display: "inline-block",
+    fontSize: "3.2rem",
+    fontFamily: "'Fira Sans', sans-serif",
+    fontWeight: 700,
+    letterSpacing: "0.5px"
+  }}
+>
+{task.title}
+</h1>
+
+<div className="meta-info">
+  Created by <strong>{task.creator?.name}</strong><small> Posted on {new Date(task.createdAt).toLocaleDateString()}</small> · <Badge bg="success">Open</Badge>
 </div>
 
 
-        <h2 className="fw-bold mb-3 text-primary">{task.title}</h2>
-        <p className="text-muted">{new Date(task.createdAt).toLocaleDateString()}</p>
+<div className="card shadow-lg mb-4" style={{ borderRadius: "12px" }}>
+  <div className="row g-0">
+    {/* Left Column - Text Content */}
+    <div className="col-md-7 p-4">
+      <h4 className="section-header" style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+        <img src={Learn} alt="learn" style={{ width: "20px", marginRight: "8px", verticalAlign: "middle" }} />
+        What you’ll learn
+      </h4>
+      <ul className="custom-list" style={{ paddingLeft: "20px", listStyleType: "disc" }}>
+        <li>How to think creatively</li>
+        <li>Communicating ideas visually</li>
+        <li>Problem-solving through design</li>
+        <li>Working on real-world projects</li>
+      </ul>
 
-        <div className="mb-4">
-          <strong>Description:</strong>
-          <p>{task.description}</p>
-
-          <strong>Budget:</strong>
-          <p>₹{task.budget}</p>
-
-          <strong>Deadline:</strong>
-          <p>{new Date(task.deadline).toLocaleDateString()}</p>
-
-          <strong>Required Skills:</strong>
-          <div className="mb-2">
+      <h4 className="section-header mt-4" style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+        <img src={Requirements} alt="requirements" style={{ width: "20px", marginRight: "8px", verticalAlign: "middle" }} />
+        Requirements
+      </h4>
+      <div className="mb-2">
             {task.skills.map((skill, index) => (
               <Badge key={index} bg="secondary" className="me-2">
-                {skill}
-              </Badge>
-            ))}
+                 {skill}
+               </Badge>
+           ))}
+           </div>
+      
+
+ {task?.attachments && task.attachments.length > 0 && (
+  <div className="task-attachments mb-4">
+    <h4
+      className="section-header mt-4"
+      style={{ fontSize: "1.25rem", fontWeight: "bold" }}
+    >
+      <img
+        src={AttachmentFile}
+        alt="attachment"
+        style={{
+          width: "20px",
+          marginRight: "8px",
+          verticalAlign: "middle",
+        }}
+      />
+      Attachments
+    </h4>
+    <ul
+      className="attachments-list"
+      style={{ paddingLeft: "20px", listStyleType: "none" }}
+    >
+      {task.attachments.map((file, index) => (
+        <li key={index}>
+          <a href={file} target="_blank" rel="noopener noreferrer">
+            {file}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+</div>
+
+
+    {/* Right Column - Lottie Animation */}
+    <div className="col-md-5 d-flex align-items-center justify-content-center p-4">
+      <Player
+        autoplay
+        loop
+        src={Working}
+        style={{ height: '400px', width: '100%',paddingRight:"10px" }}
+      />
+    </div>
+  </div>
+</div>
+
+
+<h4 className="section-header">
+  <img
+    src={Comments}
+    alt="attachment"
+    style={{ width: "20px", marginRight: "8px", verticalAlign: "middle" }}
+  />
+  Comments & Ratings
+</h4>
+
+{/* Rating Section */}
+<div className="mb-4">
+
+  </div>
+
+
+{/* Comment Form */}
+<div className="mb-4">
+  <h5 className="fw-bold">Leave a Comment</h5>
+  <Form>
+    <Form.Group controlId="commentBox">
+      <Form.Control
+        as="textarea"
+        rows={3}
+        placeholder="Write your thoughts here..."
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+      />
+    </Form.Group>
+    <Button
+      variant="primary"
+      className="mt-2"
+      style={{ backgroundColor: "#5624d0", borderColor: "#5624d0" }}
+      onClick={handleCommentSubmit}
+    >
+      Submit Comment
+    </Button>
+  </Form>
+</div>
+
+{/* Comments List */}
+<div className="mt-3">
+  <h5 className="fw-bold">Previous Comments:</h5>
+  {comments.length === 0 ? (
+    <p>No comments yet.</p>
+  ) : (
+    comments.map((comment) => {
+      const initials = comment.author?.name
+        ? comment.author.name
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+        : "U";
+
+      const formattedDate = new Date(comment.createdAt).toLocaleString();
+
+      return (
+        <div
+          key={comment._id}
+          style={{
+            border: "1px solid #ddd",
+            borderRadius: "10px",
+            padding: "16px",
+            marginBottom: "12px",
+            display: "flex",
+            alignItems: "flex-start",
+            backgroundColor: "#fafafa",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+          }}
+        >
+          <div
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              backgroundColor: "#4a90e2",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: "bold",
+              fontSize: "16px",
+              marginRight: "12px",
+            }}
+          >
+            {initials}
           </div>
 
-          <strong>Status:</strong>
-          <p className="text-capitalize">
-            <Badge bg={task.status === "rejected" ? "danger" : "success"}>{task.status}</Badge>
-          </p>
-        </div>
-
-        <Card className="p-3 mb-4 bg-light">
-          <h5 className="fw-bold">Posted By:</h5>
-          <p><strong>Name:</strong> {task.creator?.name}</p>
-          <p><strong>Email:</strong> {task.creator?.email}</p>
-        </Card>
-
-        <div className="mb-4">
-          <h5 className="fw-bold">Rating:</h5>
-          <div style={{ color: "#f5c518" }}>
-            {[...Array(5)].map((_, i) => (
-              <FaStar key={i} fill={i < 4.5 ? "#f5c518" : "#ddd"} />
-            ))}
-            <span className="ms-2 text-muted">4.5 / 5</span>
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <h5 className="fw-bold">Leave a Comment</h5>
-          <Form>
-            <Form.Group controlId="commentBox">
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="Write your thoughts here..."
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-              />
-            </Form.Group>
-            <Button
-              variant="primary"
-              className="mt-2"
-              style={{ backgroundColor: "#5624d0", borderColor: "#5624d0" }}
-              onClick={handleCommentSubmit}
+          <div>
+            <div
+              style={{
+                fontWeight: "bold",
+                fontSize: "16px",
+                marginBottom: "4px",
+              }}
             >
-              Submit Comment
-            </Button>
-          </Form>
+              {comment.author?.name || "Unknown"}
+            </div>
+            <div
+              style={{
+                fontSize: "14px",
+                color: "#666",
+                marginBottom: "8px",
+              }}
+            >
+              {formattedDate}
+            </div>
+            <div
+              style={{
+                fontSize: "15px",
+                lineHeight: "1.5",
+                color: "#333",
+              }}
+            >
+              {comment.text}
+            </div>
+          </div>
         </div>
+      );
+    })
+  )}
+</div>
 
-        <div className="mt-3">
-          <h5 className="fw-bold">Previous Comments:</h5>
-          {comments.length === 0 ? (
-            <p>No comments yet.</p>
-          ) : (
-            comments.map((comment) => {
-              const initials = comment.author?.name
-                ? comment.author.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .toUpperCase()
-                : "U";
 
-              const formattedDate = new Date(comment.createdAt).toLocaleString();
 
-              return (
-                <div
-                  key={comment._id}
-                  style={{
-                    border: "1px solid #ddd",
-                    borderRadius: "10px",
-                    padding: "16px",
-                    marginBottom: "12px",
-                    display: "flex",
-                    alignItems: "flex-start",
-                    backgroundColor: "#fafafa",
-                    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                      backgroundColor: "#4a90e2",
-                      color: "white",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: "bold",
-                      fontSize: "16px",
-                      marginRight: "12px",
-                    }}
-                  >
-                    {initials}
-                  </div>
+          {/* More comments would go here */}
+          <hr />
+        </Col>
+        
 
-                  <div>
-                    <div style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "4px" }}>
-                      {comment.author?.name || "Unknown"}
-                    </div>
-                    <div style={{ fontSize: "14px", color: "#666", marginBottom: "8px" }}>
-                      {formattedDate}
-                    </div>
-                    <div style={{ fontSize: "15px", lineHeight: "1.5", color: "#333" }}>
-                      {comment.text}
-                    </div>
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
+        {/* Right Column - Sidebar */}
+      
+        <Col md={4}>
+          <div className="position-sticky" style={{ top: '80px' }}>
+             {/* Gradient Lottie Bar */}
+    <div style={{ height: '8px', overflow: 'hidden', borderRadius: '8px 8px 0 0' }}>
+      <Player
+        autoplay
+        loop
+        src={Gradient}
+        style={{
+          height: '100%',
+          width: '100%',
+        }}
+      />
+    </div>
+            <Card className="bg-dark text-white"  style={{ borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }}> 
+              
+              <Card.Body>
+                <Row className="align-items-center mb-3">
+      <Col>
+        <h2 className="mb-0">Description</h2>
+        
+      </Col>
+      <Col xs="auto">
+  <i
+    className={`fas fa-heart fa-2x ${isSaved ? 'text-pink' : 'text-outline'}`}
+    onClick={() => {
+      if (user) {
+        handleSave();
+      }
+    }}
+    style={{
+      cursor: user ? 'pointer' : 'not-allowed',
+      opacity: user ? 1 : 0.5,
+      transition: '0.3s',
+    }}
+    title={user ? (isSaved ? "Unsave" : "Save") : "Login to save"}
+  ></i>
+</Col>
 
-        <div className="d-flex flex-column gap-3 mt-3">
-          {!isCreator && (
-            <>
-              <Button
-                onClick={() => handleApply(task._id)}
-                variant="primary"
-                style={{
-                  backgroundColor: "#5624d0",
-                  borderColor: "#5624d0",
-                  width: "100%",
-                }}
-              >
-                Apply for Task
-              </Button>
+    </Row>
+                <h7>{task.description}</h7>
+               
 
-              <Button
-                onClick={() => navigate(`/submit-task/${task._id}`)}
-                variant="outline-primary"
-                style={{ width: "100%" }}
-              >
-                Submit the Task
-              </Button>
-            </>
-          )}
+                
+                <div className="mt-3 mb-4">
+  <ListGroup variant="flush" className="text-white">
+    <ListGroup.Item className="bg-dark text-white border-0 px-0 d-flex justify-content-between">
+      <strong>Deadline:</strong>
+      <span>{new Date(task.deadline).toLocaleDateString()}</span>
+    </ListGroup.Item>
+    <ListGroup.Item className="bg-dark text-white border-0 px-0 d-flex justify-content-between">
+      <strong>Applicants:</strong>
+      <span>{task.applicantCount}</span>
+    </ListGroup.Item>
+    <ListGroup.Item className="bg-dark text-white border-0 px-0 d-flex justify-content-between">
+      <strong>Budget:</strong>
+      <span>₹{task.budget}</span>
+    </ListGroup.Item>
+    <ListGroup.Item className="bg-dark text-white border-0 px-0 d-flex justify-content-between">
+      <strong>Assigned:</strong>
+      <span>{task.assignedTo?.name || "Not assigned"}</span>
+    </ListGroup.Item>
+  </ListGroup>
+</div>
 
-          {isCreator && (
-            <>
-              <Button
-                onClick={fetchApplicants}
-                variant="outline-success"
-                style={{ width: "100%" }}
-              >
-                Review Applications
-              </Button>
+{!isCreator && (
+  <>
+    <Button
+      onClick={() => handleApply(task._id)}
+      variant="light"
+      className="w-100 mb-2 fw-bold"
+    >
+      Apply Now
+    </Button>
 
-              <Button
-                onClick={fetchSubmissions}
-                variant="outline-primary"
-                style={{ width: "100%" }}
-              >
-                See All Submissions
-              </Button>
-            </>
-          )}
-        </div>
-      </Card>
-      {showDisputeModal && (
+    <Button
+      onClick={() => navigate(`/submit-task/${task._id}`)}
+      variant="outline-light"
+      className="w-100 mb-2"
+    >
+      Submit Task
+    </Button>
+  </>
+)}
+
+                <Button
+  variant="outline-danger"
+  className="w-100 mb-2 "
+  onClick={() => setShowDisputeModal(true)}
+  disabled={!user}
+  title={!user ? "Login to raise a dispute" : ""}
+>
+  Raise Dispute
+</Button>
+
+              </Card.Body>
+            </Card>
+
+                 {showDisputeModal && (
       <div className="modal show fade d-block" tabIndex="-1">
         <div className="modal-dialog">
           <div className="modal-content">
@@ -489,9 +951,19 @@ const [disputeReason, setDisputeReason] = useState("");
         </div>
       </div>
     )}
+            
+          </div>
+
+          
+        </Col>
+      </Row>
+      
+
     </Container>
+    
   );
 };
 
 export default TaskDetail;
+
 

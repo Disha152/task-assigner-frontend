@@ -1,13 +1,16 @@
-// src/pages/BrowseTasks.js
+
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../pages/BrowseTasks.css"; // optional custom CSS
+import "../pages/BrowseTasks.css";
 
 const BrowseTasks = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user")); 
+  const currentUserId = user?._id;
 
   useEffect(() => {
     const fetchAllTasks = async () => {
@@ -49,6 +52,7 @@ const BrowseTasks = () => {
                     </Card.Text>
                     <p><strong>Budget:</strong> ₹{task.budget}</p>
                     <p><strong>Deadline:</strong> {new Date(task.deadline).toLocaleDateString()}</p>
+
                     <Button
                       as={Link}
                       to={`/task/${task._id}`}
@@ -57,6 +61,17 @@ const BrowseTasks = () => {
                     >
                       View Details
                     </Button>
+
+                    {/* Only show the "Review Applications" button if the logged-in user is the task creator */}
+                    {task.creator?._id === currentUserId && (
+                      <Button
+                        variant="outline-success"
+                        className="w-100 mt-2"
+                        onClick={() => navigate(`/tasks/${task._id}/review-applications`)}
+                      >
+                        Review Applications
+                      </Button>
+                    )}
                   </Card.Body>
                 </Card>
               </Col>

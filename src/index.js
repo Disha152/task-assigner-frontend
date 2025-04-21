@@ -7,6 +7,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
 import { RoleProvider } from './context/RoleContext';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

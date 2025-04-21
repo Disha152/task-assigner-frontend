@@ -12,10 +12,15 @@ import animationThree from "../assets/3.json";
 import userIcon from "../assets/user.svg";
 import taskIcon from "../assets/task.svg";
 import earningIcon from "../assets/earning.svg";
+import trendingImage from '../assets/trending_tasks.png';
+import recommendedImage from '../assets/recommendations.png';
+import bestSellerImage from '../assets/bestseller.png';
+import ContactUs from '../assets/contact-us.png';
+import InfiniteCarousel from "./InfiniteCarousel"; 
+import InfiniteCarouselAlt from "./InfiniteCarouselAlt";
 
-import blobPurple from "../assets/blob_purple.svg";
-import contactUs from "../assets/contactUs.json";
-import blobPurpleShade from "../assets/blob_puple_shade.svg";
+
+
 
 
 import { FaTasks, FaUsers, FaAward } from 'react-icons/fa';
@@ -37,6 +42,9 @@ const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
+  const [categories, setCategories] = useState([]);
+  const [skills,setSkills] = useState([]);
+
   const user = JSON.parse(localStorage.getItem("user"));
 const currentUserId = user?._id;
 const navigate = useNavigate();
@@ -52,8 +60,24 @@ const navigate = useNavigate();
         setLoading(false);
       }
     };
+    
     fetchTasks();
   }, []);
+  
+
+   // Fetch unique categories
+   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("https://task-assigner-backend-8184.onrender.com/api/tasks/aggregations");
+        const data = await response.json();
+        setCategories(data.uniqueCategories);  // Store unique categories in the state
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []); // Empty dependency array means it runs once when the component mounts
 
   const isUrgent = (deadline) => {
     const now = new Date();
@@ -62,94 +86,129 @@ const navigate = useNavigate();
     return diff <= 3;
   };
 
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const response = await fetch("https://task-assigner-backend-8184.onrender.com/api/tasks/aggregations");
+        const data = await response.json();
+        setSkills(data.uniqueSkills); // make sure your backend returns 'uniqueSkills'
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      }
+    };
+  
+    fetchSkills();
+  }, []);
+  
+
   const getStatusColor = (status) => {
     switch (status) {
       case "open": return "success";
-      case "assigned": return "warning";
+      case "assigned": return "success";
       case "completed": return "primary";
       case "rejected": return "danger";
       default: return "secondary";
     }
   };
   return (
-    <div style={{ backgroundColor: "#f7f9fa", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "#f7f9fa", minHeight: "40vh" }}>
     
 
   {/* Hero Section */}
 <div className="hero-section position-relative text-light" style={{
   background: "radial-gradient(circle at top left, #001f3f, #001122)",
-  minHeight: "100vh",
+  minHeight: "20vh",
   overflow: "hidden",
   fontFamily: "'Poppins', sans-serif"
 }}>
   <Container>
-    <Row className="align-items-center" style={{ minHeight: "100vh" }}>
-      <Col md={6} data-aos="fade-right">
-        {/* Hero Headline */}
-<h1 style={{
+    <Row className="align-items-center" style={{ minHeight: "20vh" }}>
+    <Col md={6} data-aos="fade-right">
+  {/* Hero Headline */}
+  <h1 className="fira-sans-bold" style={{
   fontSize: "3.2rem",
-  fontWeight: 800,
   lineHeight: "1.2",
-  color: "#fff" // fallback color
+  color: "#fff",
+  letterSpacing: "0.5px",
+  textShadow: "1px 1px 2px rgba(0,0,0,0.25)",
+  paddingBottom: "10px"
 }}>
   Your Gateway to <span style={{
     background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
-    display: "inline-block"
+    display: "inline-block",
+    fontSize: "3.2rem",
+    fontFamily: "'Fira Sans', sans-serif",
+    fontWeight: 700,
+    letterSpacing: "0.5px"
   }}>Epic Tasks</span>
 </h1>
 
-<h3 style={{
-  fontSize: "1.2rem",
-  color: "#cdddf7",
-  marginTop: "20px"
+
+
+  <h3 className="fira-sans-regular" style={{
+    fontSize: "1.2rem",
+    color: "#cdddf7",
+    marginTop: "20px"
+  }}>
+    All the tasks you need in one place
+  </h3>
+
+  <div style={{
+  background: "rgba(255, 255, 255, 0.1)",
+  borderRadius: "16px",
+  padding: "20px",
+  backdropFilter: "blur(10px)",
+  border: "1px solid rgba(255,255,255,0.2)",
+  marginTop: "40px",
+  color: "#fff"
 }}>
-  All the tasks you need in one place
-</h3>
+  <div className="d-flex align-items-center mb-3 fira-sans-regular" style={{
+    fontSize: "1rem",
+    lineHeight: "1.6",
+    letterSpacing: "0.3px"
+  }}>
+    <FaRocket className="me-2" color="#4facfe" size={20} />
+    <h7>Launch your skills with real-world tasks</h7>
+  </div>
+  <div className="d-flex align-items-center mb-3 fira-sans-regular" style={{
+    fontSize: "1rem",
+    lineHeight: "1.6",
+    letterSpacing: "0.3px"
+  }}>
+    <FaUserFriends className="me-2" color="#00f2fe" size={20} />
+    <h7>Connect with task creators & collaborators</h7>
+  </div>
+  <div className="d-flex align-items-center mb-1 fira-sans-regular" style={{
+    fontSize: "1rem",
+    lineHeight: "1.6",
+    letterSpacing: "0.3px"
+  }}>
+    <FaCheckCircle className="me-2" color="#90f7ec" size={20} />
+    <h7>Track achievements & earn recognition</h7>
+  </div>
+</div>
 
 
-        {/* Glass Info Card */}
-        <div style={{
-          background: "rgba(255, 255, 255, 0.1)",
-          borderRadius: "16px",
-          padding: "20px",
-          backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255,255,255,0.2)",
-          marginTop: "30px",
-          color: "#fff"
-        }}>
-          <div className="d-flex align-items-center mb-2">
-            <FaRocket className="me-2" color="#4facfe" size={20} />
-            <span>Launch your skills with real-world tasks</span>
-          </div>
-          <div className="d-flex align-items-center mb-2">
-            <FaUserFriends className="me-2" color="#00f2fe" size={20} />
-            <span>Connect with task creators & collaborators</span>
-          </div>
-          <div className="d-flex align-items-center mb-2">
-            <FaCheckCircle className="me-2" color="#90f7ec" size={20} />
-            <span>Track achievements & earn recognition</span>
-          </div>
-        </div>
+  {/* Live Stat */}
+  <div className="fira-sans-regular" style={{ marginTop: "15px", fontSize: "0.95rem", color: "#7cb8f5" }}>
+    🚀 <strong className="fira-sans-semibold">2,351</strong> tasks completed today by doers like you!
+  </div>
 
-        {/* Live Stat */}
-        <div style={{ marginTop: "15px", fontSize: "0.95rem", color: "#7cb8f5" }}>
-          🚀 <strong>2,351</strong> tasks completed today by doers like you!
-        </div>
+  {/* CTA Button */}
+  <Button as={Link} to="/browse-tasks" className="mt-4 fira-sans-semibold"
+    style={{
+      padding: "12px 28px",
+      fontSize: "1.1rem",
+      background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
+      border: "none",
+      fontWeight: "600"
+    }}>
+    Browse Tasks
+  </Button>
+</Col>
 
-        {/* CTA Button */}
-        <Button as={Link} to="/browse-tasks" className="mt-4"
-          style={{
-            padding: "12px 28px",
-            fontSize: "1.1rem",
-            background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
-            border: "none",
-            fontWeight: "600"
-          }}>
-          Browse Tasks
-        </Button>
-      </Col>
 
       {/* Animation */}
       <Col md={6} className="text-center d-none d-md-block" data-aos="fade-left">
@@ -158,8 +217,8 @@ const navigate = useNavigate();
           loop
           src={animationTwo}
           style={{
-            height: '550px',
-            width: '550px',
+            height: '500px',
+            width: '500px',
             transform: "translateY(-50px)"
           }}
         />
@@ -170,78 +229,82 @@ const navigate = useNavigate();
 </div>
 
   
+<Container className="py-5 fade-in text-center trending-container">
+<div className="d-flex justify-content-center align-items-center" style={{ marginBottom: '50px', marginTop: '20px' }}>
+    <img src={trendingImage} alt="Trending" style={{ width: '32px', height: '32px', marginRight: '10px' }} />
+    <h2 className="section-heading m-0 fira-sans-bold">Trending Tasks</h2>
+  </div>
+  
+<div className="infinite-carousel-wrapper py-3">
+  <div className="infinite-carousel">
+    {[...tasks, ...tasks].filter((task) => ['approved', 'assigned', 'completed','open'].includes(task.status))
+.map((task, index) => (
+      <div key={`${task._id}-${index}`} className="task-card-wrapper">
+        <Link
+          to={`/task/${task._id}`}
+          className="text-decoration-none"
+        >
+          <Card className="task-card-custom glass-card shadow-sm">
+            <Card.Body className="d-flex flex-column justify-content-between text-start">
+              <div>
+              <Card.Title className="d-flex justify-content-between align-items-center fira-sans-semibold text-dark">
+  {task.title.length > 25 ? `${task.title.slice(0, 25)}...` : task.title}
+  {isUrgent(task.deadline) && <Badge bg="danger">Urgent</Badge>}
+</Card.Title>
 
+<Card.Text className="fira-sans-regular text-dark">
+  {task.description.length > 80 ? `${task.description.slice(0, 80)}...` : task.description}
+</Card.Text>
 
-<Container className="py-5 fade-in">
-        <h2 className="section-heading text-center mb-4">Featured Tasks</h2>
+                <div className="mb-2">
+                  {task.skills?.[0] && (
+                    <Badge bg="info" className="me-2">{task.skills[0]}</Badge>
+                  )}
+                  {task.status && (
+                    <Badge bg={getStatusColor(task.status)}>{task.status}</Badge>
+                  )}
+                </div>
+              </div>
 
-        {loading ? (
-          <div className="d-flex justify-content-center">Loading...</div>
-        ) : tasks.length === 0 ? (
-          <p className="text-center">No tasks available at the moment.</p>
-        ) : (
-          <div
-            ref={scrollRef}
-            className="scroll-container hide-scrollbar"
-          >
-            {tasks.map((task, index) => (
-              <Card
-                key={index}
-                className="task-card glass-effect"
-              >
-                <Card.Body className="h-100 card-custom border-0 shadow-sm glass-effect fade-in">
-                  <div>
-                    <Card.Title className="d-flex justify-content-between align-items-center">
-                      {task.title}
-                      {isUrgent(task.deadline) && (
-                        <Badge bg="danger">Urgent</Badge>
-                      )}
-                    </Card.Title>
-
-                    <Card.Text>{task.description.slice(0, 60)}...</Card.Text>
-
-                    <div className="mb-2">
-                      {task.skills?.[0] && (
-                        <Badge bg="info" className="me-2">{task.skills[0]}</Badge>
-                      )}
-                      {task.status && (
-                        <Badge bg={getStatusColor(task.status)}>{task.status}</Badge>
-                      )}
-                    </div>
-                  </div>
-                  
-
-                 
-                  <div>
-  <p className="mb-1"><strong>Budget:</strong> ₹{task.budget}</p>
-  <p className="mb-2"><strong>Deadline:</strong> {new Date(task.deadline).toLocaleDateString()}</p>
-
-  <Button
-    as={Link}
-    to={`/task/${task._id}`}
-    variant="outline-primary"
-    className="custom-outline-btn mt-2 w-100"
-  >
-    View Task
-  </Button>
-
-  {task.creator?._id === currentUserId && (
-    <Button
-      variant="outline-primary"
-      className="mt-2 w-100"
-      onClick={() => navigate(`/task/${task._id}/applications`)}
-    >
-      Review Applications
-    </Button>
-  )}
+              <div>
+                <p className="mb-1 text-dark"><strong>Budget:</strong> ₹{task.budget}</p>
+                <p className="mb-0 text-dark"><strong>Deadline:</strong> {new Date(task.deadline).toLocaleDateString()}</p>
+              </div>
+            </Card.Body>
+          </Card>
+        </Link>
+      </div>
+    ))}
+  </div>
 </div>
 
-                </Card.Body>
-              </Card>
-            ))}
-          </div>
-        )}
-      </Container>
+</Container>
+
+<Container className="py-5 fade-in text-center trending-container">
+<div className="d-flex justify-content-center align-items-center" style={{ marginBottom: '50px', marginTop: '20px' }}>
+    <img src={recommendedImage} alt="Trending" style={{ width: '32px', height: '32px', marginRight: '10px' }} />
+    <h2 className="section-heading m-0 fira-sans-bold">Category Based Tasks</h2>
+  </div>
+  
+ {/* Add the InfiniteCarousel here */}
+ <InfiniteCarousel categories={categories} /> {/* Pass categories as a prop to the InfiniteCarousel component */}
+
+</Container>
+
+
+
+
+<Container className="py-5 fade-in text-center trending-container">
+<div className="d-flex justify-content-center align-items-center" style={{ marginBottom: '50px', marginTop: '20px' }}>
+    <img src={bestSellerImage} alt="Trending" style={{ width: '32px', height: '32px', marginRight: '10px' }} />
+    <h2 className="section-heading m-0 fira-sans-bold">Skills Based Tasks</h2>
+  </div>
+  
+  <InfiniteCarouselAlt skills={skills} />
+
+
+</Container>
+
      
 
       {/* CTA Section */}
@@ -315,32 +378,95 @@ const navigate = useNavigate();
 </div>
 
 {/* Achievements Section */}
-<div style={{ background: "#eef4fa", padding: "60px 0", fontFamily: "'Poppins', sans-serif" }}>
+<div style={{ background: "#0d1b2a", padding: "50px 0", fontFamily: "'Fira Sans', sans-serif" }}>
   <Container>
-    <h2 className="text-center mb-5" style={{ fontWeight: "700", fontSize: "2.2rem", color: "#333" }}>
-      Our Achievements So Far
-    </h2>
-    <Row className="text-center">
+  <h2 className="fira-sans-bold text-center mb-5" style={{ color: "#fff", fontSize: "2.5rem" }}>
+  Our Achievements 🎉
+</h2>
+
+    <Row className="text-center justify-content-center">
+      {/* Card 1 */}
       <Col md={4} className="mb-4">
-        <FaTasks size={40} color="#007bff" className="mb-3" />
-        <h3 style={{ fontWeight: 600, fontSize: "2rem", color: "#222" }}>
-          <CountUp end={10234} duration={3} separator="," />+
-        </h3>
-        <p style={{ color: "#555" }}>Tasks Completed</p>
+        <div style={{
+          background: "rgba(255, 255, 255, 0.9)",
+          borderRadius: "16px",
+          padding: "30px 20px",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+          transition: "transform 0.3s ease",
+        }} className="hover-lift">
+          <div style={{
+            background: "linear-gradient(135deg, #6a11cb, #2575fc)",
+            borderRadius: "50%",
+            width: "70px",
+            height: "70px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 20px auto"
+          }}>
+            <FaTasks size={32} color="#fff" />
+          </div>
+          <h3 className="fira-sans-bold" style={{ fontSize: "2rem", color: "#222" }}>
+            <CountUp end={10234} duration={3} separator="," />+
+          </h3>
+          <p className="fira-sans-regular" style={{ color: "#555", marginTop: "8px" }}>Tasks Completed</p>
+        </div>
       </Col>
+
+      {/* Card 2 */}
       <Col md={4} className="mb-4">
-        <FaUsers size={40} color="#28a745" className="mb-3" />
-        <h3 style={{ fontWeight: 600, fontSize: "2rem", color: "#222" }}>
-          <CountUp end={5731} duration={3} separator="," />+
-        </h3>
-        <p style={{ color: "#555" }}>Active Users</p>
+        <div style={{
+          background: "rgba(255, 255, 255, 0.9)",
+          borderRadius: "16px",
+          padding: "30px 20px",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+          transition: "transform 0.3s ease",
+        }} className="hover-lift">
+          <div style={{
+            background: "linear-gradient(135deg, #11998e, #38ef7d)",
+            borderRadius: "50%",
+            width: "70px",
+            height: "70px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 20px auto"
+          }}>
+            <FaUsers size={32} color="#fff" />
+          </div>
+          <h3 className="fira-sans-bold" style={{ fontSize: "2rem", color: "#222" }}>
+            <CountUp end={5731} duration={3} separator="," />+
+          </h3>
+          <p className="fira-sans-regular" style={{ color: "#555", marginTop: "8px" }}>Active Users</p>
+        </div>
       </Col>
+
+      {/* Card 3 */}
       <Col md={4} className="mb-4">
-        <FaMoneyBillWave size={40} color="#ff6600" className="mb-3" />
-        <h3 style={{ fontWeight: 600, fontSize: "2rem", color: "#222" }}>
-          ₹<CountUp end={8735624} duration={3} separator="," />
-        </h3>
-        <p style={{ color: "#555" }}>Earnings Generated</p>
+        <div style={{
+          background: "rgba(255, 255, 255, 0.9)",
+          borderRadius: "16px",
+          padding: "30px 20px",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+          transition: "transform 0.3s ease",
+        }} className="hover-lift">
+          <div style={{
+            background: "linear-gradient(135deg, #f7971e, #ffd200)",
+            borderRadius: "50%",
+            width: "70px",
+            height: "70px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 20px auto"
+          }}>
+            <FaMoneyBillWave size={32} color="#fff" />
+          </div>
+          <h3 className="fira-sans-bold" style={{ fontSize: "2rem", color: "#222" }}>
+            ₹<CountUp end={8735624} duration={3} separator="," />
+          </h3>
+          <p className="fira-sans-regular" style={{ color: "#555", marginTop: "8px" }}>Earnings Generated</p>
+        </div>
       </Col>
     </Row>
   </Container>
@@ -354,26 +480,19 @@ const navigate = useNavigate();
     <Row className="align-items-center">
    
 
-
+    <h1 style={{ fontWeight: 'bold', fontSize: '3rem', color: 'black', paddingLeft: "130px" }}>Contact Us</h1>
       {/* Left Side - Info + Image */}
       <Col md={6} className="mb-4 mb-md-0 text-center text-md-start position-relative">
+      
         <img
-          src={blobPurpleShade}
+          src={ContactUs}
           alt="Purple Blob"
-          style={{ position: "absolute", top: -200, left: -90, width: "80%", opacity: 0.3, zIndex: 0 , paddingLeft: "60px" }}
+          style={{ position: "absolute", top: -250, left: -83, width: "80%", opacity: 1, zIndex: 0 , paddingLeft: "60px" }}
         />
-        <img
-          src={blobPurple}
-          alt="Purple Blob"
-          style={{ position: "absolute", top: -200, left: -120, width: "95%", opacity: 0.8, zIndex: 0 , paddingLeft: "150px"}}
-        />
+        
         <div style={{ position: "relative", zIndex: 1 }}>
-        <h1 style={{ fontWeight: 'bold', fontSize: '2.5rem', color: 'white', paddingLeft: "150px" }}>Contact Us</h1>
 
-          {/* <p className="text-muted">
-            Have questions or feedback? We'd love to hear from you.
-            Fill out the form and we'll get in touch!
-          </p> */}
+         
         </div>
       </Col>
 
@@ -446,20 +565,21 @@ const navigate = useNavigate();
  
 
  {/* Newsletter Signup */}
-<Container className="py-5 text-center" style={{ backgroundColor: "#f5f7ff" }}>
+ <Container className="py-5 text-center" style={{ backgroundColor: "#f5f7ff" }}>
   <h3 className="mb-3">Stay updated with latest tasks & features</h3>
-  <form className="d-flex flex-column flex-md-row justify-content-center">
-    <input
+  <form className="flex-md-row justify-content-center">
+    {/* <input
       type="email"
       className="form-control mb-2 mb-md-0 me-md-2"
       placeholder="Enter your email"
       style={{ maxWidth: "300px" }}
-    />
+    /> */}
     <Button
       type="submit"
       style={{
         background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        border: "none"
+        border: "none",
+        width:  "max-content",
       }}
     >
       Subscribe

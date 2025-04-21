@@ -66,7 +66,7 @@ const SubmitTaskForm = () => {
             rows={5}
             value={submissionText}
             onChange={(e) => setSubmissionText(e.target.value)}
-            placeholder="Write your solution or explanation here..."
+            placeholder="Paste the Google drive link for you submission"
           />
         </Form.Group>
 
