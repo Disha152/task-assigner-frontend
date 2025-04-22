@@ -16,7 +16,7 @@ import Requirements from "../assets/requirements.png";
 import  Working from "../assets/working.json";
 import Gradient from "../assets/gradient.json";
 import { Player } from '@lottiefiles/react-lottie-player'; // or use lottie-react
-
+import ReactStars from "react-rating-stars-component";
 
 
 
@@ -37,6 +37,9 @@ const TaskDetail = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [showDisputeModal, setShowDisputeModal] = useState(false);
 const [disputeReason, setDisputeReason] = useState("");
+const [rating, setRating] = useState(0);
+const [averageRating, setAverageRating] = useState(0);
+
  // Function to render badges for categories and subcategories
  const renderBadges = (items, badgeClass) => {
   return items.split(',').map((item, index) => (
@@ -101,6 +104,15 @@ const [liked, setLiked] = useState(false);
     fetchTask();
     fetchComments();
   }, [id]);
+
+  useEffect(() => {
+    const fetchAvgRating = async () => {
+      const res = await axios.get(`/api/tasks/${taskId}/average-rating`);
+      setAverageRating(res.data.averageRating);
+    };
+    fetchAvgRating();
+  }, []);
+  
 
   useEffect(() => {
     if (user?.token) {
@@ -232,35 +244,55 @@ if (!token) {
     }
   };
 
+  // const handleCommentSubmit = async () => {
+  //   if (!comment.trim()) {
+  //     alert("Comment cannot be empty.");
+  //     return;
+  //   }
+
+  //   const token = user?.token;
+  //   if (!token) {
+  //     alert("You must be logged in to submit a comment.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post(
+  //       `https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/comment`,
+  //       { comment },
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+  //     if (response.status === 200) {
+  //       setComment("");
+  //       alert("Comment submitted successfully!");
+  //     }
+  //   } catch (error) {
+  //     alert("Failed to submit the comment.");
+  //   }
+  // };
   const handleCommentSubmit = async () => {
-    if (!comment.trim()) {
-      alert("Comment cannot be empty.");
-      return;
-    }
-
-    const token = user?.token;
-    if (!token) {
-      alert("You must be logged in to submit a comment.");
-      return;
-    }
-
+    if (!comment.trim()) return alert("Comment is required");
+    if (!rating) return alert("Please provide a rating");
+  
     try {
-      const response = await axios.post(
-        `https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/comment`,
-        { comment },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      if (response.status === 200) {
-        setComment("");
-        alert("Comment submitted successfully!");
-      }
+      const res = await axios.post(`/api/tasks/${taskId}/comment`, {
+        comment,
+        rating
+      }, {
+        headers: { Authorization: `Bearer ${userToken}` }
+      });
+  
+      // Refresh comments
+      setComments([...comments, res.data.comment]);
+      setComment("");
+      setRating(0);
     } catch (error) {
-      alert("Failed to submit the comment.");
+      console.error("Error posting comment:", error);
     }
   };
-
+  
   const handleRaiseDispute = async () => {
     if (!disputeReason.trim()) {
       alert("Please provide a reason for the dispute.");
@@ -310,279 +342,7 @@ if (!token) {
 
   return (
     
-//     <Container className="py-5">
-//       <Card className="shadow p-4 border-0 position-relative">
 
-//         <div className="custom-buttons-container">
-//   {/* Save Button */}
-//   <Button
-//     className="custom-save-btn"
-//     onClick={handleSave}
-//     disabled={!user}
-//   >
-//     {isSaved ? "Unsave" : "Save"}
-//   </Button>
-
-//   {/* Raise Dispute Button */}
-//   <Button
-//     className="raise-dispute-btn"
-//     onClick={() => setShowDisputeModal(true)}
-//     disabled={!user}
-//   >
-//     Raise Dispute
-//   </Button>
-// </div>
-
-
-//         <h2 className="fw-bold mb-3 text-primary">{task.title}</h2>
-//         <p className="text-muted">{new Date(task.createdAt).toLocaleDateString()}</p>
-
-//         <div className="mb-4">
-//           <strong>Description:</strong>
-//           <p>{task.description}</p>
-
-//           <strong>Budget:</strong>
-//           <p>₹{task.budget}</p>
-
-//           <strong>Deadline:</strong>
-//           <p>{new Date(task.deadline).toLocaleDateString()}</p>
-
-//           <strong>Required Skills:</strong>
-//           <div className="mb-2">
-//             {task.skills.map((skill, index) => (
-//               <Badge key={index} bg="secondary" className="me-2">
-//                 {skill}
-//               </Badge>
-//             ))}
-//           </div>
-
-          
-//         </div>
-
-      
-//         {/* Categories */}
-//       {task?.category && (
-//         <div className=" mb-4">
-//           <strong>Category:</strong>
-//           <div>{renderBadges(task.category, 'badge-category')}</div>
-//         </div>
-//       )}
-
-//       {/* Subcategories */}
-//       {task?.subcategory && (
-//         <div className=" mb-4">
-//           <strong>Subcategory:</strong>
-//           <div>{renderBadges(task.subcategory, 'badge-subcategory')}</div>
-//         </div>
-//       )}
-
-//      {/* Attachments */}
-// {task?.attachments && task.attachments.length > 0 && (
-//   <div className="task-attachments mb-4">
-//     <strong>Attachments:</strong>
-//     <ul>
-//       {task.attachments.map((file, index) => (
-//         <li key={index}>
-//           <a href={file} target="_blank" rel="noopener noreferrer">
-//             {file}
-//           </a>
-//         </li>
-//       ))}
-//     </ul>
-//   </div>
-// )}
-
-
-      
-
-
-//         <Card className="p-3 mb-4 bg-light">
-//           <h5 className="fw-bold">Posted By:</h5>
-//           <p><strong>Name:</strong> {task.creator?.name}</p>
-//           <p><strong>Email:</strong> {task.creator?.email}</p>
-//         </Card>
-
-//         <div className="mb-4">
-//           <h5 className="fw-bold">Rating:</h5>
-//           <div style={{ color: "#f5c518" }}>
-//             {[...Array(5)].map((_, i) => (
-//               <FaStar key={i} fill={i < 4.5 ? "#f5c518" : "#ddd"} />
-//             ))}
-//             <span className="ms-2 text-muted">4.5 / 5</span>
-//           </div>
-//         </div>
-
-//         <div className="mb-4">
-//           <h5 className="fw-bold">Leave a Comment</h5>
-//           <Form>
-//             <Form.Group controlId="commentBox">
-//               <Form.Control
-//                 as="textarea"
-//                 rows={3}
-//                 placeholder="Write your thoughts here..."
-//                 value={comment}
-//                 onChange={(e) => setComment(e.target.value)}
-//               />
-//             </Form.Group>
-//             <Button
-//               variant="primary"
-//               className="mt-2"
-//               style={{ backgroundColor: "#5624d0", borderColor: "#5624d0" }}
-//               onClick={handleCommentSubmit}
-//             >
-//               Submit Comment
-//             </Button>
-//           </Form>
-//         </div>
-
-//         <div className="mt-3">
-//           <h5 className="fw-bold">Previous Comments:</h5>
-//           {comments.length === 0 ? (
-//             <p>No comments yet.</p>
-//           ) : (
-//             comments.map((comment) => {
-//               const initials = comment.author?.name
-//                 ? comment.author.name
-//                     .split(" ")
-//                     .map((n) => n[0])
-//                     .join("")
-//                     .toUpperCase()
-//                 : "U";
-
-//               const formattedDate = new Date(comment.createdAt).toLocaleString();
-
-//               return (
-//                 <div
-//                   key={comment._id}
-//                   style={{
-//                     border: "1px solid #ddd",
-//                     borderRadius: "10px",
-//                     padding: "16px",
-//                     marginBottom: "12px",
-//                     display: "flex",
-//                     alignItems: "flex-start",
-//                     backgroundColor: "#fafafa",
-//                     boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-//                   }}
-//                 >
-//                   <div
-//                     style={{
-//                       width: "40px",
-//                       height: "40px",
-//                       borderRadius: "50%",
-//                       backgroundColor: "#4a90e2",
-//                       color: "white",
-//                       display: "flex",
-//                       alignItems: "center",
-//                       justifyContent: "center",
-//                       fontWeight: "bold",
-//                       fontSize: "16px",
-//                       marginRight: "12px",
-//                     }}
-//                   >
-//                     {initials}
-//                   </div>
-
-//                   <div>
-//                     <div style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "4px" }}>
-//                       {comment.author?.name || "Unknown"}
-//                     </div>
-//                     <div style={{ fontSize: "14px", color: "#666", marginBottom: "8px" }}>
-//                       {formattedDate}
-//                     </div>
-//                     <div style={{ fontSize: "15px", lineHeight: "1.5", color: "#333" }}>
-//                       {comment.text}
-//                     </div>
-//                   </div>
-//                 </div>
-//               );
-//             })
-//           )}
-//         </div>
-
-//         <div className="d-flex flex-column gap-3 mt-3">
-//           {!isCreator && (
-//             <>
-//               <Button
-//                 onClick={() => handleApply(task._id)}
-//                 variant="primary"
-//                 style={{
-//                   backgroundColor: "#5624d0",
-//                   borderColor: "#5624d0",
-//                   width: "100%",
-//                 }}
-//               >
-//                 Apply for Task
-//               </Button>
-
-//               <Button
-//                 onClick={() => navigate(`/submit-task/${task._id}`)}
-//                 variant="outline-primary"
-//                 style={{ width: "100%" }}
-//               >
-//                 Submit the Task
-//               </Button>
-//             </>
-//           )}
-
-//           {isCreator && (
-//             <>
-//              <Button
-//         onClick={handleReviewApplications}
-//         variant="outline-success"
-//         style={{ width: "100%" }}
-//       >
-//         Review Applications
-//       </Button>
-
-//               <Button
-//                 onClick={fetchSubmissions}
-//                 variant="outline-primary"
-//                 style={{ width: "100%" }}
-//               >
-//                 See All Submissions
-//               </Button>
-//             </>
-//           )}
-//         </div>
-//       </Card>
-//       {showDisputeModal && (
-//       <div className="modal show fade d-block" tabIndex="-1">
-//         <div className="modal-dialog">
-//           <div className="modal-content">
-//             <div className="modal-header">
-//               <h5 className="modal-title">Raise Dispute</h5>
-//               <button
-//                 type="button"
-//                 className="btn-close"
-//                 onClick={() => setShowDisputeModal(false)}
-//               ></button>
-//             </div>
-//             <div className="modal-body">
-//               <Form.Group>
-//                 <Form.Label>Reason for Dispute</Form.Label>
-//                 <Form.Control
-//                   as="textarea"
-//                   rows={3}
-//                   value={disputeReason}
-//                   onChange={(e) => setDisputeReason(e.target.value)}
-//                   placeholder="Describe the issue..."
-//                 />
-//               </Form.Group>
-//             </div>
-//             <div className="modal-footer">
-//               <Button variant="secondary" onClick={() => setShowDisputeModal(false)}>
-//                 Cancel
-//               </Button>
-//               <Button variant="danger" onClick={handleRaiseDispute}>
-//                 Submit Dispute
-//               </Button>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     )}
-//     </Container>
 <Container fluid className="p-4 font-fira">
       <Row>
         {/* Left Column - Main Content */}
@@ -603,6 +363,17 @@ if (!token) {
 >
 {task.title}
 </h1>
+<h6 className="text-muted">
+  Average Rating: <span className="fw-bold">{averageRating} / 5</span>
+  <ReactStars
+    count={5}
+    value={parseFloat(averageRating)}
+    edit={false}
+    size={20}
+    activeColor="#ffd700"
+  />
+</h6>
+
 
 <div className="meta-info">
   Created by <strong>{task.creator?.name}</strong><small> Posted on {new Date(task.createdAt).toLocaleDateString()}</small> · <Badge bg="success">Open</Badge>
@@ -613,7 +384,70 @@ if (!token) {
   <div className="row g-0">
     {/* Left Column - Text Content */}
     <div className="col-md-7 p-4">
-      <h4 className="section-header" style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+
+
+       {/* Optional: Additional Fields */}
+       <h4 className="section-header mt-4" style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+        <img src={Requirements} alt="details" style={{ width: "20px", marginRight: "8px", verticalAlign: "middle" }} />
+        Task Details
+      </h4>
+      <ul className="custom-list" style={{ paddingLeft: "20px", listStyleType: "disc" }}>
+        <li><strong>Experience Level:</strong> {task.experienceLevel}</li>
+        <li><strong>Time Commitment:</strong> {task.timeCommitment}</li>
+        <li><strong>Deliverables:</strong> {task.deliverables}</li>
+        <li><strong>Communication Expectations:</strong> {task.communicationExpectations}</li>
+        <li>
+          <strong>Additional Notes:</strong>{" "}
+          <a href={task.additionalNotes} target="_blank" rel="noopener noreferrer">
+            {task.additionalNotes}
+          </a>
+        </li>
+      </ul>
+     
+      <h4 className="section-header mt-4" style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+        <img src={Requirements} alt="requirements" style={{ width: "20px", marginRight: "8px", verticalAlign: "middle" }} />
+        Requirements
+      </h4>
+      <div className="mb-2">
+        {task.skills.map((skill, index) => (
+          <Badge key={index} bg="secondary" className="me-2 mb-2">
+            {skill}
+          </Badge>
+        ))}
+      </div>
+
+      {task?.attachments && task.attachments.length > 0 && (
+        <div className="task-attachments mb-4">
+          <h4
+            className="section-header mt-4"
+            style={{ fontSize: "1.25rem", fontWeight: "bold" }}
+          >
+            <img
+              src={AttachmentFile}
+              alt="attachment"
+              style={{
+                width: "20px",
+                marginRight: "8px",
+                verticalAlign: "middle",
+              }}
+            />
+            Attachments
+          </h4>
+          <ul
+            className="attachments-list"
+            style={{ paddingLeft: "20px", listStyleType: "none" }}
+          >
+            {task.attachments.map((file, index) => (
+              <li key={index}>
+                <a href={file} target="_blank" rel="noopener noreferrer">
+                  {file}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+       <h4 className="section-header" style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
         <img src={Learn} alt="learn" style={{ width: "20px", marginRight: "8px", verticalAlign: "middle" }} />
         What you’ll learn
       </h4>
@@ -624,52 +458,8 @@ if (!token) {
         <li>Working on real-world projects</li>
       </ul>
 
-      <h4 className="section-header mt-4" style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
-        <img src={Requirements} alt="requirements" style={{ width: "20px", marginRight: "8px", verticalAlign: "middle" }} />
-        Requirements
-      </h4>
-      <div className="mb-2">
-            {task.skills.map((skill, index) => (
-              <Badge key={index} bg="secondary" className="me-2">
-                 {skill}
-               </Badge>
-           ))}
-           </div>
-      
-
- {task?.attachments && task.attachments.length > 0 && (
-  <div className="task-attachments mb-4">
-    <h4
-      className="section-header mt-4"
-      style={{ fontSize: "1.25rem", fontWeight: "bold" }}
-    >
-      <img
-        src={AttachmentFile}
-        alt="attachment"
-        style={{
-          width: "20px",
-          marginRight: "8px",
-          verticalAlign: "middle",
-        }}
-      />
-      Attachments
-    </h4>
-    <ul
-      className="attachments-list"
-      style={{ paddingLeft: "20px", listStyleType: "none" }}
-    >
-      {task.attachments.map((file, index) => (
-        <li key={index}>
-          <a href={file} target="_blank" rel="noopener noreferrer">
-            {file}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
-
-</div>
+     
+    </div>
 
 
     {/* Right Column - Lottie Animation */}
@@ -702,7 +492,19 @@ if (!token) {
 
 {/* Comment Form */}
 <div className="mb-4">
+
   <h5 className="fw-bold">Leave a Comment</h5>
+  <div className="mb-3">
+  <label className="form-label fw-bold">Your Rating</label>
+  <ReactStars
+    count={5}
+    size={30}
+    value={rating}
+    onChange={(newRating) => setRating(newRating)}
+    activeColor="#ffd700"
+  />
+</div>
+
   <Form>
     <Form.Group controlId="commentBox">
       <Form.Control
@@ -773,7 +575,20 @@ if (!token) {
             {initials}
           </div>
 
+
+
           <div>
+          <div style={{ display: "flex", alignItems: "center", marginBottom: "6px" }}>
+  <span className="me-2 fw-bold">{comment.author?.name || "Unknown"}</span>
+  <ReactStars
+    count={5}
+    value={comment.rating || 0}
+    edit={false}
+    size={16}
+    activeColor="#ffd700"
+  />
+</div>
+
             <div
               style={{
                 fontWeight: "bold",

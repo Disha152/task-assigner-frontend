@@ -1,0 +1,19 @@
+.create-task-container {
+    max-width: 800px;
+  }
+  
+  .create-task-container h2 {
+    font-weight: bold;
+  }
+  
+  .create-task-container .form-control,
+  .create-task-container .form-select {
+    border-radius: 10px;
+    padding: 10px;
+  }
+  
+  .create-task-container .btn {
+    padding: 10px 30px;
+    border-radius: 30px;
+  }
+  
