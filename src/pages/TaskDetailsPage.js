@@ -51,16 +51,7 @@ const [liked, setLiked] = useState(false);
   const toggleLike = () => setLiked(!liked);
 
   useEffect(() => {
-    // const fetchTask = async () => {
-    //   try {
-    //     const response = await axios.get(`https://task-assigner-backend-8184.onrender.com/api/tasks/${id}`);
-    //     setTask(response.data);
-    //     setLoading(false);
-    //   } catch (error) {
-    //     console.error("Error fetching task:", error);
-    //     setLoading(false);
-    //   }
-    // };
+   
 
     const fetchTask = async () => {
       try {
@@ -105,14 +96,7 @@ const [liked, setLiked] = useState(false);
     fetchComments();
   }, [id]);
 
-  useEffect(() => {
-    const fetchAvgRating = async () => {
-      const res = await axios.get(`/api/tasks/${taskId}/average-rating`);
-      setAverageRating(res.data.averageRating);
-    };
-    fetchAvgRating();
-  }, []);
-  
+ 
 
   useEffect(() => {
     if (user?.token) {
@@ -244,55 +228,35 @@ if (!token) {
     }
   };
 
-  // const handleCommentSubmit = async () => {
-  //   if (!comment.trim()) {
-  //     alert("Comment cannot be empty.");
-  //     return;
-  //   }
-
-  //   const token = user?.token;
-  //   if (!token) {
-  //     alert("You must be logged in to submit a comment.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post(
-  //       `https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/comment`,
-  //       { comment },
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       }
-  //     );
-  //     if (response.status === 200) {
-  //       setComment("");
-  //       alert("Comment submitted successfully!");
-  //     }
-  //   } catch (error) {
-  //     alert("Failed to submit the comment.");
-  //   }
-  // };
   const handleCommentSubmit = async () => {
-    if (!comment.trim()) return alert("Comment is required");
-    if (!rating) return alert("Please provide a rating");
-  
+    if (!comment.trim()) {
+      alert("Comment cannot be empty.");
+      return;
+    }
+
+    const token = user?.token;
+    if (!token) {
+      alert("You must be logged in to submit a comment.");
+      return;
+    }
+
     try {
-      const res = await axios.post(`/api/tasks/${taskId}/comment`, {
-        comment,
-        rating
-      }, {
-        headers: { Authorization: `Bearer ${userToken}` }
-      });
-  
-      // Refresh comments
-      setComments([...comments, res.data.comment]);
-      setComment("");
-      setRating(0);
+      const response = await axios.post(
+        `https://task-assigner-backend-8184.onrender.com/api/tasks/${id}/comment`,
+        { comment },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.status === 200) {
+        setComment("");
+        alert("Comment submitted successfully!");
+      }
     } catch (error) {
-      console.error("Error posting comment:", error);
+      alert("Failed to submit the comment.");
     }
   };
-  
+ 
   const handleRaiseDispute = async () => {
     if (!disputeReason.trim()) {
       alert("Please provide a reason for the dispute.");
